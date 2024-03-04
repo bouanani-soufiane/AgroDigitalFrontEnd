@@ -2,7 +2,7 @@ const Products = [
   {
     id: 1,
     product_code: "9256821912-FE",
-    name: "Amazon Echo Plus (3nd Gen) - Premium",
+    name: "Amazon Echo Plus (3nd Gen)",
     type: "electronics",
     change: "5.7%",
     price: 49,

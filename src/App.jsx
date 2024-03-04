@@ -10,7 +10,7 @@ const App = () => {
     <>
       <div className=" flex relative dark:bg-main-dark-bg">
         {activeMenu ? (
-          <div className=" w-64 fixed sidebar dark:bg-secondary-dark-bg bg-white">
+          <div className=" z-50 w-64 fixed sidebar dark:bg-secondary-dark-bg bg-white">
             <Sidebar activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
           </div>
         ) : (
@@ -23,10 +23,10 @@ const App = () => {
             activeMenu ? " md:ml-64" : "  flex-2"
           }`}
         >
-          <div className="fixed bg-white py-4 px-8 md:static bg-main-bg dark:bg-main-dark-bg navbar w-full">
+          <div className="fixed  bg-white z-10 dark:bg-[#181C1F] dark:border-b-2 dark:border-[#35383B] py-4 px-8 md:static bg-main-bg dark:bg-main-dark-bg navbar w-full">
             <Navbar activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
           </div>
-          <div className=" py-24 px-6 lg:p-14">
+          <div className="  py-24 px-6 lg:p-14">
             <Dashboard />
           </div>
         </div>
