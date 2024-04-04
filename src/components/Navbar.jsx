@@ -3,7 +3,6 @@ import { IoIosArrowDown } from "react-icons/io";
 import { GoMoon, GoSun, GoBell } from "react-icons/go";
 import { useEffect, useState } from "react";
 import { BiUser } from "react-icons/bi";
-import { IoSettingsOutline } from "react-icons/io5";
 
 export const Navbar = ({ activeMenu, setActiveMenu }) => {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
@@ -53,14 +52,16 @@ export const Navbar = ({ activeMenu, setActiveMenu }) => {
           />
         )}
         <GoBell className="my-auto text-md cursor-pointer" />
-        <div className="flex text-base gap-1">
-          <p className="cursor-default">Manuel Alejandro</p>
-          <IoIosArrowDown
-            onClick={() => {
-              setIsOpen(!isOpen);
-            }}
-            className="my-auto cursor-pointer"
-          />
+        <div className="flex text-base gap-1"
+          onClick={() => {
+            setIsOpen(!isOpen);
+          }}>
+
+          <p className="cursor-default mx-3 px-4 flex ">Hassan Jaraf
+            <IoIosArrowDown
+              className="my-auto cursor-pointer"
+            /> </p>
+
           {isOpen && (
             <div className=" bg-[#333] flex flex-col absolute top-28 md:top-16 w-40 p-3 text-sm rounded-md">
               <a
@@ -69,13 +70,6 @@ export const Navbar = ({ activeMenu, setActiveMenu }) => {
               >
                 <BiUser className=" text-base" />
                 Profile
-              </a>
-              <a
-                href="/"
-                className="hover:bg-[#444] dark:hover:bg-[#444] flex items-center gap-2 text-white dark:text-gray-300 p-2"
-              >
-                <IoSettingsOutline className=" text-base" />
-                Settings
               </a>
               <a
                 href="/"

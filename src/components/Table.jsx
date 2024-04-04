@@ -1,5 +1,18 @@
-import Products from "../data/Products.js";
 import { BsThreeDots } from "react-icons/bs";
+const Products = [
+  {
+    id: 1,
+    product_code: "9256821912-FE",
+    name: "Amazon Echo Plus (3nd Gen)",
+    type: "electronics",
+    change: "5.7%",
+    price: 49,
+    sold: 5.951,
+    sales: 15302,
+    image: "alexa.webp",
+  }
+];
+
 
 export const Table = () => {
   return (

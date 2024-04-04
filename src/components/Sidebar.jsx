@@ -1,13 +1,12 @@
-import { MdOutlineCancel } from "react-icons/md";
-import { BsFileBarGraphFill, BsBoxSeam } from "react-icons/bs";
-import { RiCoupon2Line } from "react-icons/ri";
-import { BiMessageRoundedDetail } from "react-icons/bi";
-import { GoQuestion } from "react-icons/go";
-import { MdOutlinePhoneInTalk, MdOutlinePayments } from "react-icons/md";
+import { MdOutlineCancel, MdLogout } from "react-icons/md";
+import { BsFileBarGraphFill } from "react-icons/bs";
+import { FaTasks } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { GiFarmer } from "react-icons/gi";
 
 export const Sidebar = ({ activeMenu, setActiveMenu }) => {
   return (
-    <div className=" bg-[#5367E4] dark:bg-[#181C1F]  dark:border-r-2 dark:border-[#35383B] h-screen md:overflow-hidden overflow-auto md:hover:overflow-auto pb-8">
+    <div className=" bg-green-900 dark:bg-[#181C1F]  dark:border-r-2 dark:border-[#35383B] h-screen md:overflow-hidden overflow-auto md:hover:overflow-auto pb-8">
       {activeMenu && (
         <>
           <div>
@@ -20,8 +19,7 @@ export const Sidebar = ({ activeMenu, setActiveMenu }) => {
             </button>
           </div>
 
-          <div className=" justify-center items-center gap-2 mt-10 text-white text-xl flex flex-col">
-            <img src="logo.webp" alt="logo" className=" size-12 shadow-2xl" />
+          <div className=" mx-7 mt-10 text-white text-xl flex flex-col">
             <a href="/" className="font-extrabold tracking-tight">
               Universal
             </a>
@@ -34,34 +32,49 @@ export const Sidebar = ({ activeMenu, setActiveMenu }) => {
                 <p className="text-gray-300 text-sm font-semibold tracking-wide px-4 mt-10">
                   Pages
                 </p>
-                <a
-                  href="/"
-                  className=" hover:bg-[#EFF1FF] dark:hover:bg-[#343338] text-sm hover:font-bold hover:border-l-4 hover:border-emerald-500 hover:text-black gap-3 px-8 py-3 items-center font-normal mt-2 flex tracking-tight text-white dark:text-gray-300"
+                <Link
+                  to="/"
+                  className=" hover:bg-[#EFF1FF] dark:hover:bg-[#343338] text-sm hover:font-bold hover:border-l-4 hover:border-[#181C1F] hover:text-black gap-3 px-8 py-3 items-center font-normal mt-2 flex tracking-tight text-white dark:text-gray-300"
                 >
                   <BsFileBarGraphFill className=" text-lg" />
                   Dashboard
-                </a>
-                <a
-                  href="/"
-                  className=" hover:bg-[#EFF1FF] dark:hover:bg-[#343338] text-sm hover:font-bold hover:border-l-4 hover:border-emerald-500 hover:text-black gap-3 px-8 py-3 items-center font-normal mt-2 flex tracking-tight text-white dark:text-gray-300"
+                </Link>
+                <Link
+                  to="/program"
+                  className=" hover:bg-[#EFF1FF] dark:hover:bg-[#343338] text-sm hover:font-bold hover:border-l-4 hover:border-[#181C1F] hover:text-black gap-3 px-8 py-3 items-center font-normal mt-2 flex tracking-tight text-white dark:text-gray-300"
                 >
-                  <BsBoxSeam className=" text-lg" />
-                  Get Free Products
-                </a>
-                <a
-                  href="/"
-                  className=" hover:bg-[#EFF1FF] dark:hover:bg-[#343338] text-sm hover:font-bold hover:border-l-4 hover:border-emerald-500 hover:text-black gap-3 px-8 py-3 items-center font-normal mt-2 flex tracking-tight text-white dark:text-gray-300"
+                  <BsFileBarGraphFill className=" text-lg" />
+                  Program
+                </Link>
+                <Link
+                  to="/employees"
+                  className=" hover:bg-[#EFF1FF] dark:hover:bg-[#343338] text-sm hover:font-bold hover:border-l-4 hover:border-[#181C1F] hover:text-black gap-3 px-8 py-3 items-center font-normal mt-2 flex tracking-tight text-white dark:text-gray-300"
                 >
-                  <RiCoupon2Line className=" text-lg" />
-                  Coupons
-                </a>
-                <a
-                  href="/"
-                  className=" hover:bg-[#EFF1FF] dark:hover:bg-[#343338] text-sm hover:font-bold hover:border-l-4 hover:border-emerald-500 hover:text-black gap-3 px-8 py-3 items-center font-normal mt-2 flex tracking-tight text-white dark:text-gray-300"
+                  <GiFarmer className=" text-lg" />
+                  Employee
+                </Link>
+                <Link
+                  to="/tasks"
+                  className=" hover:bg-[#EFF1FF] dark:hover:bg-[#343338] text-sm hover:font-bold hover:border-l-4 hover:border-[#181C1F] hover:text-black gap-3 px-8 py-3 items-center font-normal mt-2 flex tracking-tight text-white dark:text-gray-300"
                 >
-                  <BiMessageRoundedDetail className=" text-lg" />
-                  Messages
-                </a>
+                  <FaTasks className=" text-lg" />
+                  Tasks
+                </Link>
+                <Link
+                  to="/products"
+                  className=" hover:bg-[#EFF1FF] dark:hover:bg-[#343338] text-sm hover:font-bold hover:border-l-4 hover:border-[#181C1F] hover:text-black gap-3 px-8 py-3 items-center font-normal mt-2 flex tracking-tight text-white dark:text-gray-300"
+                >
+                  <FaTasks className=" text-lg" />
+                  Products
+                </Link>
+                <Link
+                  to="/maladies"
+                  className=" hover:bg-[#EFF1FF] dark:hover:bg-[#343338] text-sm hover:font-bold hover:border-l-4 hover:border-[#181C1F] hover:text-black gap-3 px-8 py-3 items-center font-normal mt-2 flex tracking-tight text-white dark:text-gray-300"
+                >
+                  <FaTasks className=" text-lg" />
+                  Maladie
+                </Link>
+
               </div>
               {/* */}
               <div>
@@ -70,25 +83,12 @@ export const Sidebar = ({ activeMenu, setActiveMenu }) => {
                 </p>
                 <a
                   href="/"
-                  className=" hover:bg-[#EFF1FF] dark:hover:bg-[#343338] text-sm hover:font-bold hover:border-l-4 hover:border-emerald-500 hover:text-black gap-3 px-8 py-3 items-center font-normal mt-2 flex tracking-tight text-white dark:text-gray-300"
+                  className=" hover:bg-[#EFF1FF] dark:hover:bg-[#343338] text-sm hover:font-bold hover:border-l-4 hover:border-[#181C1F] hover:text-black gap-3 px-8 py-3 items-center font-normal mt-2 flex tracking-tight text-white dark:text-gray-300"
                 >
-                  <GoQuestion className=" text-lg" />
-                  FAQ
+                  <MdLogout className=" text-lg" />
+                  Logout
                 </a>
-                <a
-                  href="/"
-                  className=" hover:bg-[#EFF1FF] dark:hover:bg-[#343338] text-sm hover:font-bold hover:border-l-4 hover:border-emerald-500 hover:text-black gap-3 px-8 py-3 items-center font-normal mt-2 flex tracking-tight text-white dark:text-gray-300"
-                >
-                  <MdOutlinePhoneInTalk className=" text-lg" />
-                  Contact Us
-                </a>
-                <a
-                  href="/"
-                  className=" hover:bg-[#EFF1FF] dark:hover:bg-[#343338] text-sm hover:font-bold hover:border-l-4 hover:border-emerald-500 hover:text-black gap-3 px-8 py-3 items-center font-normal mt-2 flex tracking-tight text-white dark:text-gray-300"
-                >
-                  <MdOutlinePayments className=" text-lg" />
-                  Billing
-                </a>
+
               </div>
             </div>
           </div>
