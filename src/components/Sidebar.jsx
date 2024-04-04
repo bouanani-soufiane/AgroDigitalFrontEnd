@@ -3,6 +3,14 @@ import { BsFileBarGraphFill } from "react-icons/bs";
 import { FaTasks } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { GiFarmer } from "react-icons/gi";
+import { FaDisease } from "react-icons/fa6";
+import { RiStockFill } from "react-icons/ri";
+import { FaHome } from "react-icons/fa";
+import { MdOutlineCleaningServices } from "react-icons/md";
+
+
+
+
 
 export const Sidebar = ({ activeMenu, setActiveMenu }) => {
   return (
@@ -36,7 +44,7 @@ export const Sidebar = ({ activeMenu, setActiveMenu }) => {
                   to="/"
                   className=" hover:bg-[#EFF1FF] dark:hover:bg-[#343338] text-sm hover:font-bold hover:border-l-4 hover:border-[#181C1F] hover:text-black gap-3 px-8 py-3 items-center font-normal mt-2 flex tracking-tight text-white dark:text-gray-300"
                 >
-                  <BsFileBarGraphFill className=" text-lg" />
+                  <FaHome className=" text-lg" />
                   Dashboard
                 </Link>
                 <Link
@@ -64,15 +72,22 @@ export const Sidebar = ({ activeMenu, setActiveMenu }) => {
                   to="/products"
                   className=" hover:bg-[#EFF1FF] dark:hover:bg-[#343338] text-sm hover:font-bold hover:border-l-4 hover:border-[#181C1F] hover:text-black gap-3 px-8 py-3 items-center font-normal mt-2 flex tracking-tight text-white dark:text-gray-300"
                 >
-                  <FaTasks className=" text-lg" />
+                  <RiStockFill className=" text-lg" />
                   Products
                 </Link>
                 <Link
                   to="/maladies"
                   className=" hover:bg-[#EFF1FF] dark:hover:bg-[#343338] text-sm hover:font-bold hover:border-l-4 hover:border-[#181C1F] hover:text-black gap-3 px-8 py-3 items-center font-normal mt-2 flex tracking-tight text-white dark:text-gray-300"
                 >
-                  <FaTasks className=" text-lg" />
+                  <FaDisease className=" text-lg" />
                   Maladie
+                </Link>
+                <Link
+                  to="/traitement"
+                  className=" hover:bg-[#EFF1FF] dark:hover:bg-[#343338] text-sm hover:font-bold hover:border-l-4 hover:border-[#181C1F] hover:text-black gap-3 px-8 py-3 items-center font-normal mt-2 flex tracking-tight text-white dark:text-gray-300"
+                >
+                  <MdOutlineCleaningServices className=" text-lg" />
+                  Traitement
                 </Link>
 
               </div>

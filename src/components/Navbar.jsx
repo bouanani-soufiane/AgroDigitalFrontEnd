@@ -3,6 +3,8 @@ import { IoIosArrowDown } from "react-icons/io";
 import { GoMoon, GoSun, GoBell } from "react-icons/go";
 import { useEffect, useState } from "react";
 import { BiUser } from "react-icons/bi";
+import { Link } from "react-router-dom";
+
 
 export const Navbar = ({ activeMenu, setActiveMenu }) => {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
@@ -64,13 +66,13 @@ export const Navbar = ({ activeMenu, setActiveMenu }) => {
 
           {isOpen && (
             <div className=" bg-[#333] flex flex-col absolute top-28 md:top-16 w-40 p-3 text-sm rounded-md">
-              <a
-                href="/"
+              <Link
+                to="profile"
                 className="hover:bg-[#444] dark:hover:bg-[#444] flex gap-2 items-center text-white dark:text-gray-300 p-2"
               >
                 <BiUser className=" text-base" />
                 Profile
-              </a>
+              </Link>
               <a
                 href="/"
                 className="hover:bg-[#444] dark:hover:bg-[#444] flex items-center gap-2 text-white dark:text-gray-300 p-2"

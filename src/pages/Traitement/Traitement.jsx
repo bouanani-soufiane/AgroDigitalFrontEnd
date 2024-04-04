@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card } from "../../components/Card";
 
-const Task = () => {
+const Traitement = () => {
     return (
         <>
             <div className="grid gap-4 md:gap-8 grid-cols-1 md:grid-cols-4">
@@ -13,7 +13,7 @@ const Task = () => {
             <div className='pt-12 grid gap-4 md:gap-8 grid-cols-1 rounded-lg '>
 
                 <div className="align-middle inline-block min-w-full shadow overflow-hidden dark:bg-[#343338] shadow-dashboard px-8 pt-3  rounded-lg pb-3">
-                    <h1 className='font-bold text-2xl mb-8 mt-2 text-white'>All Tasks </h1>
+                    <h1 className='font-bold text-2xl mb-8 mt-2 text-white'>All Traitments </h1>
                     <table className="w-full dark:bg-[#343338]">
                         <thead>
                             <tr>
@@ -77,8 +77,9 @@ const Task = () => {
 
                 </div>
             </div>
+
         </>
     )
 }
 
-export default Task
+export default Traitement
