@@ -23,9 +23,11 @@ const Login = () => {
         let userCredential = {
             email, password
         }
-        dispatch(LoginUser(userCredential))
+        await dispatch(LoginUser(userCredential))
             .then((result) => {
+                // console.log(result);
                 if (result.payload) {
+                    // console.log(result.payload);
                     setEmail('');
                     setPassword('');
                     navigate('/');
@@ -38,7 +40,7 @@ const Login = () => {
 
             <div className="flex items-center justify-center min-h-screen bg-gray-100">
                 <div
-                    className="relative flex flex-col m-6 space-y-8 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0"
+                    className=" flex flex-col m-6 space-y-8 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0"
                 >
                     <form className="flex flex-col justify-center p-8 md:p-14"
                         onSubmit={handleLogin}

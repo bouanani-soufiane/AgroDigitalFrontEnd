@@ -4,12 +4,21 @@ import { GoMoon, GoSun, GoBell } from "react-icons/go";
 import { useEffect, useState } from "react";
 import { BiUser } from "react-icons/bi";
 import { Link } from "react-router-dom";
+import { logout } from "../store/UserSlice";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+
 
 
 export const Navbar = ({ activeMenu, setActiveMenu }) => {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+  const { user, isLoggedIn, didLogout } = useSelector((state) => state.user);
 
+  const handleThemeSwitch = () => {
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+  };
   useEffect(() => {
     localStorage.setItem("theme", theme);
     if (theme === "dark") {
@@ -19,9 +28,18 @@ export const Navbar = ({ activeMenu, setActiveMenu }) => {
     }
   }, [theme]);
 
-  const handleThemeSwitch = () => {
-    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+
+  const dispatch = useDispatch();
+  const handleLogout = () => {
+    dispatch(logout());
+    // navigate("/login");
   };
+  useEffect(() => {
+    if (!isLoggedIn && didLogout) {
+      navigate("/login");
+    }
+  }, [isLoggedIn, navigate]);
+
 
   return (
     <div className=" grid grid-cols-4 items-center">
@@ -73,13 +91,13 @@ export const Navbar = ({ activeMenu, setActiveMenu }) => {
                 <BiUser className=" text-base" />
                 Profile
               </Link>
-              <a
-                href="/"
+              <button
                 className="hover:bg-[#444] dark:hover:bg-[#444] flex items-center gap-2 text-white dark:text-gray-300 p-2"
+                onClick={handleLogout}
               >
                 <MdOutlineLogout className=" text-base" />
                 Logout
-              </a>
+              </button>
             </div>
           )}
         </div>
