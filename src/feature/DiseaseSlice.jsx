@@ -22,10 +22,11 @@ export const addDisease = createAsyncThunk(
   "Disease/addDisease",
   async (data) => {
     const response = await axios.post("http://localhost/api/v1/disease/", {
-      name: data.name,
-      description: data.description,
-      type: data.type,
+      name: data.data.name,
+      description: data.data.description,
+      type: data.data.type,
     });
+    
     return response.data.data;
   }
 );
