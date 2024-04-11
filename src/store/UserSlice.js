@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+
 const initialState = {
   user: {},
   isLoggedIn: false,
@@ -46,9 +47,9 @@ const UserSlice = createSlice({
     state.user = {};
     state.token = "";
     state.role = null;
-    state.isLoggedIn = false; 
-    state.didLogout = true; 
-            
+    state.isLoggedIn = false;
+    state.didLogout = true;
+
     const user = JSON.parse(localStorage.getItem('user'));
     console.log(user.access_token);
 
@@ -57,10 +58,10 @@ const UserSlice = createSlice({
     })
     .then(() => console.log('Logged out from server'))
     .catch((error) => console.error(error));
-        
+
     localStorage.removeItem("user");
     },
- 
+
     // checkUser: (state) => {
     //   const creds = decryptData();
     //     if (creds.user) {
@@ -122,7 +123,7 @@ const UserSlice = createSlice({
                 state.isLoading = false;
                 state.error = action.error.message;
            })
-          
+
     }
 });
 
