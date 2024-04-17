@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { toast } from 'react-toastify';
 
 const DiseaseState = {
   updateState: false,
@@ -12,8 +13,8 @@ const DiseaseState = {
 export const fetchDisease = createAsyncThunk(
   "Disease/fetchDisease",
   async () => {
-    const response = await axios.get("http://localhost/api/v1/disease");
-    console.log(response.data.data);
+    const response = await axios.get("http://localhost/api/v1/diseases");
+    // console.log(response.data.data);
     return response.data.data;
   }
 );
@@ -21,13 +22,20 @@ export const fetchDisease = createAsyncThunk(
 export const addDisease = createAsyncThunk(
   "Disease/addDisease",
   async (data) => {
-    const response = await axios.post("http://localhost/api/v1/disease/", {
-      name: data.data.name,
-      description: data.data.description,
-      type: data.data.type,
-    });
-    
-    return response.data.data;
+    try {
+      const response = await axios.post("http://localhost/api/v1/diseases/", {
+        name: data.name,
+        description: data.description,
+        type: data.type,
+      });
+
+      console.log("Response from server:", response.data);
+
+      return response.data.data;
+    } catch (error) {
+      console.error("Error adding disease:", error.message);
+      throw error;
+    }
   }
 );
 
@@ -35,12 +43,13 @@ export const removeDisease = createAsyncThunk(
   "Disease/removeDisease",
   async (data) => {
     const response = await axios.delete(
-      `http://localhost/api/v1/disease/${data}`
+      `http://localhost/api/v1/diseases/${data}`
     );
-    return response.data.response;
+    console.log("Response from server:", response.data.data);
+
+    return response.data;
   }
 );
-
 
 const DiseaseSlice = createSlice({
   name: "Disease",
@@ -65,10 +74,14 @@ const DiseaseSlice = createSlice({
         state.loading = false;
         state.DiseaseList = [...state.DiseaseList, action.payload];
         state.response = "add";
+        toast.success('New disease added successfully!');
+        console.log(action.payload)
+        console.log("Newly added action:", action.payload);
       })
       .addCase(addDisease.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+        state.response = "";
       });
 
     builder
@@ -79,14 +92,21 @@ const DiseaseSlice = createSlice({
         state.error = action.error.message;
       });
 
-    builder.addCase(removeDisease.fulfilled, (state, action) => {
-      state.DiseaseList = state.DiseaseList.filter(
-        (item) => item.id != action.payload
-      );
-      state.response = "delete";
-    });
+    builder
+      .addCase(removeDisease.fulfilled, (state, action) => {
+        const newDiseaseList = state.DiseaseList.filter(item => item.id !== action.payload)
+        state.response = "delete";
+        console.log(action.payload)
+        console.log(state.DiseaseList)
+        state.DiseaseList = newDiseaseList
+        toast.success('Disease deleted successfully!');
 
+      })
+      .addCase(removeDisease.rejected, (state, action) => {
+        state.response = "";
+        console.log("error:", action)
 
+      });
   },
 });
 

@@ -4,12 +4,40 @@ import ModalDialog from '@mui/joy/ModalDialog';
 import { IoIosRemoveCircleOutline } from "react-icons/io";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import { IoIosAddCircleOutline } from "react-icons/io";
+import { useEffect } from "react";
+import { fetchProgram, } from '../../feature/ProgramSlice';
+
+import { useDispatch, useSelector } from "react-redux";
 
 import Add from '@mui/icons-material/Add';
 import { Card } from "../../components/Card";
 import TextField from '@mui/material/TextField';
 
 const Program = () => {
+    const dispatch = useDispatch();
+    const { loading, ProgramList, error, response } = useSelector(
+        (state) => state.Program
+    );
+    useEffect(() => {
+        dispatch(fetchProgram());
+    }, []);
+
+    // Check if ProgramList has data
+    if (ProgramList.length > 0) {
+        // Loop through each program in ProgramList
+        ProgramList.forEach(program => {
+            // console.log(program);
+
+            // Check if the program has a 'stage' array and it's not empty
+            if (program.stage && program.stage.length > 0) {
+                // Loop through each stage in the program
+                program.stage.forEach(stage => {
+                    // Log the id of each stage
+                    console.log(stage.pivot.attribute_name);
+                });
+            }
+        });
+    }
     const [open, setOpen] = React.useState(false);
     const [formStage, setFormStage] = React.useState([{ name: "" }])
     const [formAttribute, setformAttribute] = React.useState([{ name: "" }])
@@ -78,21 +106,21 @@ const Program = () => {
                                     <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-blue-500 rounded-lg shrink-0 sm:w-auto gap-x-2 hover:bg-blue-600 dark:hover:bg-blue-500 dark:bg-blue-900"
                                         variant="outlined"
                                         color="neutral"
-                                        startDecorator={<Add />}
-                                        onClick={() => setOpen(true)}>
+                                        startDecorator={ <Add /> }
+                                        onClick={ () => setOpen(true) }>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-5 h-5">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
                                         <span>Add program</span>
                                     </button>
-                                    <Modal open={open} onClose={() => setOpen(false)} className='container mx-auto bg'>
+                                    <Modal open={ open } onClose={ () => setOpen(false) } className='container mx-auto bg'>
                                         <ModalDialog className='w-full '>
                                             <h1 className='text-center font-bold text-4xl'>Create new Program</h1>
                                             <form
-                                                onSubmit={(event) => {
+                                                onSubmit={ (event) => {
                                                     event.preventDefault();
                                                     setOpen(false);
-                                                }}
+                                                } }
                                                 className='w-full'
                                             >
                                                 <div className='gap-12 mx-auto flex sm:flex-nowrap flex-wrap'>
@@ -110,37 +138,37 @@ const Program = () => {
                                                 <div className='gap-12 mx-auto flex sm:flex-nowrap flex-wrap'>
                                                     <div className="lg:w-100 md:w-1/2 sm:w-1/2 my-3">
                                                         <h1 className='font-bold'>Stages</h1>
-                                                        {formStage.map((element, i) => (
-                                                            <div className="lg:w-100 md:w-1/2 sm:w-1/2 my-3" key={i}>
-                                                                <TextField variant="standard" label="Stage" className="w-full rounded-md border border-gray-300 dark:border-gray-700" onChange={(e) => handleChange("stage", i, e)} />
-                                                                {i ? (
-                                                                    <IoIosRemoveCircleOutline className='my-3 ' onClick={() => removeFormFields("stage", i)} />
-                                                                ) : null}
+                                                        { formStage.map((element, i) => (
+                                                            <div className="lg:w-100 md:w-1/2 sm:w-1/2 my-3" key={ i }>
+                                                                <TextField variant="standard" label="Stage" className="w-full rounded-md border border-gray-300 dark:border-gray-700" onChange={ (e) => handleChange("stage", i, e) } />
+                                                                { i ? (
+                                                                    <IoIosRemoveCircleOutline className='my-3 ' onClick={ () => removeFormFields("stage", i) } />
+                                                                ) : null }
                                                             </div>
-                                                        ))}
+                                                        )) }
                                                         <div className="mt-3">
-                                                            <IoIosAddCircleOutline onClick={() => addFormFields("stage")} />
+                                                            <IoIosAddCircleOutline onClick={ () => addFormFields("stage") } />
                                                         </div>
                                                     </div>
 
                                                     <div className="lg:w-100 md:w-1/2 sm:w-1/2 my-3">
                                                         <h1 className='font-bold'>Attributes</h1>
-                                                        {formAttribute.map((element, i) => (
-                                                            <div className="lg:w-100 md:w-1/2 sm:w-1/2 my-3" key={i}>
-                                                                <TextField variant="standard" label="Attribute" className="w-full rounded-md border border-gray-300 dark:border-gray-700" onChange={(e) => handleChange("attribute", i, e)} />
-                                                                {i ? (
-                                                                    <IoIosRemoveCircleOutline className='my-3 ' onClick={() => removeFormFields("attribute", i)} />
-                                                                ) : null}
+                                                        { formAttribute.map((element, i) => (
+                                                            <div className="lg:w-100 md:w-1/2 sm:w-1/2 my-3" key={ i }>
+                                                                <TextField variant="standard" label="Attribute" className="w-full rounded-md border border-gray-300 dark:border-gray-700" onChange={ (e) => handleChange("attribute", i, e) } />
+                                                                { i ? (
+                                                                    <IoIosRemoveCircleOutline className='my-3 ' onClick={ () => removeFormFields("attribute", i) } />
+                                                                ) : null }
                                                             </div>
-                                                        ))}
+                                                        )) }
                                                         <div className="mt-3">
-                                                            <IoIosAddCircleOutline onClick={() => addFormFields("attribute")} />
+                                                            <IoIosAddCircleOutline onClick={ () => addFormFields("attribute") } />
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className='mx-auto mt-4 '>
 
-                                                    <button type="submit" class="bg-green-900 text-white dark:bg-[#343338] hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center text-lg dark:hover:bg-green-900 dark:focus:ring-blue-800 w-[100%] ">Submit</button>
+                                                    <button type="submit" className="bg-green-900 text-white dark:bg-[#343338] hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center text-lg dark:hover:bg-green-900 dark:focus:ring-blue-800 w-[100%] ">Submit</button>
                                                 </div>
                                             </form>
                                         </ModalDialog>
@@ -150,113 +178,67 @@ const Program = () => {
                         </div>
                         <Tabs variant='soft-rounded' colorScheme='green'>
                             <TabList>
-                                <Tab className='font-semibold bg-green-200 py-2 px-4 rounded-full' >Raspberry</Tab>
-                                <Tab className='font-semibold mx-4 bg-red-200 py-2 px-4 rounded-full'>Myrtille</Tab>
-                                <Tab className='font-semibold mx-4 bg-red-200 py-2 px-4 rounded-full'>x</Tab>
+                                { ProgramList.map(program => (
+                                    <Tab className='font-semibold bg-green-200 py-2 px-4 rounded-full mr-4' >Raspberry</Tab>
+                                )) }
                             </TabList>
                             <TabPanels>
-                                <TabPanel>
-                                    <div className="mt-6">
-                                        <div className="overflow-x-auto  rounded-lg shadow">
-                                            <table className="w-full whitespace-nowrap">
-                                                <thead>
-                                                    <tr className="text-xs font-semibold tracking-wide text-left  uppercase border-b dark:border-gray-700 bg-green-900 text-white  dark:text-gray-400 dark:hover:text-gray-900 dark:bg-[#343338] dark:hover:bg-gray-50">
-                                                        <th className="px-4 py-3">Stage</th>
-                                                        <th className="px-4 py-3">days</th>
-                                                        <th className="px-4 py-3">MgO</th>
-                                                        <th className="px-4 py-3">K2O</th>
-                                                        <th className="px-4 py-3">N_Total</th>
-                                                        <th className="px-4 py-3">Zn</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-[#343338] dark:hover:bg-gray-50 ">
-                                                    <tr className="text-gray-700 dark:bg-gray-700 dark:text-gray-100  bg-green-100  dark:hover:text-gray-200 dark:hover:bg-gray-600">
-                                                        <td className="px-4 py-3">Stage 1</td>
-                                                        <td className="px-4 py-3">15</td>
-                                                        <td className="px-4 py-3">1.3</td>
-                                                        <td className="px-4 py-3">2.2</td>
-                                                        <td className="px-4 py-3">2.4</td>
-                                                        <td className="px-4 py-3">2.6</td>
-                                                    </tr>
-                                                    <tr className="text-gray-700 dark:bg-gray-700 dark:text-gray-100  bg-green-100  dark:hover:text-gray-200 dark:hover:bg-gray-600">
-                                                        <td className="px-4 py-3">Stage 1</td>
-                                                        <td className="px-4 py-3">15</td>
-                                                        <td className="px-4 py-3">1.3</td>
-                                                        <td className="px-4 py-3">2.2</td>
-                                                        <td className="px-4 py-3">2.4</td>
-                                                        <td className="px-4 py-3">2.6</td>
-                                                    </tr>
-                                                    <tr className="text-gray-700 dark:bg-gray-700 dark:text-gray-100  bg-green-100  dark:hover:text-gray-200 dark:hover:bg-gray-600">
-                                                        <td className="px-4 py-3">Stage 1</td>
-                                                        <td className="px-4 py-3">15</td>
-                                                        <td className="px-4 py-3">1.3</td>
-                                                        <td className="px-4 py-3">2.2</td>
-                                                        <td className="px-4 py-3">2.4</td>
-                                                        <td className="px-4 py-3">2.6</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </TabPanel>
-                                <TabPanel>
-                                    <div className="mt-6">
-                                        <div className="overflow-x-auto  rounded-lg shadow">
-                                            <table className="w-full whitespace-nowrap">
-                                                <thead>
-                                                    <tr className="text-xs font-semibold tracking-wide text-left  uppercase border-b dark:border-gray-700 bg-green-900 text-white  dark:text-gray-400 dark:hover:text-gray-900 dark:bg-[#343338] dark:hover:bg-gray-50">
-                                                        <th className="px-4 py-3">Stage</th>
-                                                        <th className="px-4 py-3">days</th>
-                                                        <th className="px-4 py-3">Fe</th>
-                                                        <th className="px-4 py-3">K2O</th>
-                                                        <th className="px-4 py-3">N_Total</th>
-                                                        <th className="px-4 py-3">Zn</th>
-                                                        <th className="px-4 py-3">Zn</th>
-                                                        <th className="px-4 py-3">Zn</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-[#343338] dark:hover:bg-gray-50 ">
-                                                    <tr className="text-gray-700 dark:bg-gray-700 dark:text-gray-100  bg-green-100  dark:hover:text-gray-200 dark:hover:bg-gray-600">
-                                                        <td className="px-4 py-3">Stage 2</td>
-                                                        <td className="px-4 py-3">0</td>
-                                                        <td className="px-4 py-3">0</td>
-                                                        <td className="px-4 py-3">0</td>
-                                                        <td className="px-4 py-3">0</td>
-                                                        <td className="px-4 py-3">0</td>
-                                                        <td className="px-4 py-3">0</td>
-                                                        <td className="px-4 py-3">0</td>
-                                                    </tr>
-                                                    <tr className="text-gray-700 dark:bg-gray-700 dark:text-gray-100  bg-green-100  dark:hover:text-gray-200 dark:hover:bg-gray-600">
-                                                        <td className="px-4 py-3">Stage 2</td>
-                                                        <td className="px-4 py-3">0</td>
-                                                        <td className="px-4 py-3">0</td>
-                                                        <td className="px-4 py-3">0</td>
-                                                        <td className="px-4 py-3">0</td>
-                                                        <td className="px-4 py-3">0</td>
-                                                        <td className="px-4 py-3">0</td>
-                                                        <td className="px-4 py-3">0</td>
-                                                    </tr>
-                                                    <tr className="text-gray-700 dark:bg-gray-700 dark:text-gray-100  bg-green-100  dark:hover:text-gray-200 dark:hover:bg-gray-600">
-                                                        <td className="px-4 py-3">Stage 2</td>
-                                                        <td className="px-4 py-3">0</td>
-                                                        <td className="px-4 py-3">0</td>
-                                                        <td className="px-4 py-3">0</td>
-                                                        <td className="px-4 py-3">0</td>
-                                                        <td className="px-4 py-3">0</td>
-                                                        <td className="px-4 py-3">0</td>
-                                                        <td className="px-4 py-3">0</td>
-                                                    </tr>
+                                { ProgramList.map(program => (
+                                    <TabPanel>
+                                        <div className="mt-6">
+                                            <div className="overflow-x-auto  rounded-lg shadow">
+                                                <table className="w-full whitespace-nowrap">
+                                                    <thead>
 
-                                                </tbody>
-                                            </table>
+
+                                                        <tr className="text-xs font-semibold tracking-wide text-left uppercase border-b dark:border-gray-700 bg-green-900 text-white dark:text-gray-400 dark:hover:text-gray-900 dark:bg-[#343338] dark:hover:bg-gray-50">
+                                                            <th className="px-4 py-3">Stage</th>
+                                                            <th className="px-4 py-3">days</th>
+
+                                                            { program.stage && program.stage.length > 0 && (
+                                                                [...new Set(program.stage.map(stage => stage.pivot.attribute_name))].map(attributeName => (
+                                                                    <th key={ attributeName } className="px-4 py-3">{ attributeName }</th>
+                                                                ))
+                                                            ) }
+                                                        </tr>
+
+
+
+                                                    </thead>
+                                                    <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-[#343338] dark:hover:bg-gray-50 ">
+                                                        <tr className="text-gray-700 dark:bg-gray-700 dark:text-gray-100  bg-green-100  dark:hover:text-gray-200 dark:hover:bg-gray-600">
+                                                            <td className="px-4 py-3">Stage 1</td>
+                                                            <td className="px-4 py-3">15</td>
+                                                            <td className="px-4 py-3">1.3</td>
+                                                            <td className="px-4 py-3">2.2</td>
+                                                            <td className="px-4 py-3">2.4</td>
+                                               
+                                                        </tr>
+                                                        <tr className="text-gray-700 dark:bg-gray-700 dark:text-gray-100  bg-green-100  dark:hover:text-gray-200 dark:hover:bg-gray-600">
+                                                            <td className="px-4 py-3">Stage 1</td>
+                                                            <td className="px-4 py-3">15</td>
+                                                            <td className="px-4 py-3">1.3</td>
+                                                            <td className="px-4 py-3">2.2</td>
+                                                            <td className="px-4 py-3">2.4</td>
+                                               
+                                                        </tr>
+                                                        <tr className="text-gray-700 dark:bg-gray-700 dark:text-gray-100  bg-green-100  dark:hover:text-gray-200 dark:hover:bg-gray-600">
+                                                            <td className="px-4 py-3">Stage 1</td>
+                                                            <td className="px-4 py-3">15</td>
+                                                            <td className="px-4 py-3">1.3</td>
+                                                            <td className="px-4 py-3">2.2</td>
+                                                            <td className="px-4 py-3">2.4</td>
+                                               
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
-                                    </div>
-                                </TabPanel>
-                                <TabPanel>
-                                    <div className='bg-white my-3 '>another</div>
-                                </TabPanel>
+                                    </TabPanel>
+                                )) }
                             </TabPanels>
                         </Tabs>
+
 
                     </div>
 

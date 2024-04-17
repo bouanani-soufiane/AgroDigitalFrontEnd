@@ -2,7 +2,6 @@ import { React, useState } from 'react'
 import HomeNav from '../../components/HomeNav'
 import Footer from '../../components/Footer'
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useDispatch, useSelector } from 'react-redux';
 import { RegisterUser } from '../../store/UserSlice';
 

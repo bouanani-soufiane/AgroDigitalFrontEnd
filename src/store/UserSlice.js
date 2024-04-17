@@ -31,7 +31,7 @@ export const RegisterUser = createAsyncThunk(
     async (userCredential) => {
         const request = await axios.post(`http://localhost/api/v1/register`, userCredential);
         console.log(request);
-        const response = await request.data;
+        const response = await request.data.data;
         console.log(response);
         localStorage.setItem('user', JSON.stringify(response));
         return response;
@@ -110,8 +110,9 @@ const UserSlice = createSlice({
                     console.log('failed');
                 } else {
                     state.isLoading = false;
-                    state.user = action.payload.data.user;
-                    state.role = action.payload.data.user.role;
+                    state.user = action.payload.name;
+                    state.role = action.payload.role;
+                    console.log(action.payload);
                     console.log("Registered successfully");
                 }
             })

@@ -6,8 +6,8 @@ import Add from '@mui/icons-material/Add';
 import { Card } from "../../components/Card";
 import { addDisease, fetchDisease, removeDisease} from '../../feature/DiseaseSlice';
 import { useEffect } from "react";
-
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const Maladie = () => {
   const [open, setOpen] = useState(false);
 
@@ -23,7 +23,7 @@ const Maladie = () => {
 
     useEffect(() => {
         dispatch(fetchDisease());
-    }, [dispatch]);
+    }, []);
 
     const handleClick = (e) => {
         e.preventDefault();
@@ -37,10 +37,12 @@ const Maladie = () => {
         setName("");
         setDescription("");
         setType("");
+        setOpen(false);
     };
 
     const deleteDisease = (id) => {
         dispatch(removeDisease(id));
+        dispatch(fetchDisease());
     };
 
 
@@ -52,7 +54,7 @@ const Maladie = () => {
                 <Card title="Disputes" number="5" color="#FFBA79" />
                 <Card title="Messages" number="8" color="#FFB2D3" />
             </div>
-
+            <ToastContainer />
             <div className='pt-12 grid gap-4 md:gap-8 grid-cols-1 rounded-lg '>
 
                 <div className="align-middle inline-block min-w-full shadow overflow-hidden dark:bg-[#343338] shadow-dashboard px-8 pt-3  rounded-lg pb-3">
@@ -62,7 +64,6 @@ const Maladie = () => {
                             <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-blue-500 rounded-lg shrink-0 sm:w-auto gap-x-2 hover:bg-blue-600 dark:hover:bg-blue-500 dark:bg-blue-900"
                                 variant="outlined"
                                 color="neutral"
-                                startDecorator={ <Add /> }
                                 onClick={ () => setOpen(true) }>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -151,27 +152,14 @@ const Maladie = () => {
                         <tbody className="w-full">
 
                             { loading ? <p> Loading... </p> : null }
-                            { !loading && DiseaseList.length == 0 ? (
-                                <div className=' w-full mx-auto'>
-                                    <div class="bg-gray-50 flex items-center ">
-                                        <div class="container flex flex-col md:flex-row items-center justify-between px-5 text-gray-700">
-                                                <div class="w-full lg:w-1/2 mx-8">
-                                                    <div class="text-7xl text-green-500 font-dark font-extrabold mb-8"> 404</div>
-                                                <p class="text-2xl md:text-3xl font-light leading-normal mb-8">
-                                                    Sorry No Data Found
-                                                </p>
-
-                                        </div>
-                                            <div class="w-full lg:flex lg:justify-end lg:w-1/2 mx-5 my-12">
-                                            <img src="https://user-images.githubusercontent.com/43953425/166269493-acd08ccb-4df3-4474-95c7-ad1034d3c070.svg" class="" alt="Page not found"/>
-                                            </div>
-
-                                        </div>
-                                    </div>
+                            { !loading && DiseaseList.length === 0 && (
+                                <div className="w-full mx-auto">
+                                    <p className="text-center text-gray-500 font-bold">No Diseases Found</p>
                                 </div>
-                            ) : null }
+                            ) }
+
                             { !loading && error ? <p> { error } </p> : null }
-                            { DiseaseList &&
+                            {
                                 DiseaseList.map((item, index) => (
                                     <tr key={ item.id }>
                                         <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
