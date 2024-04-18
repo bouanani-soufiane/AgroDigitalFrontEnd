@@ -4,8 +4,8 @@ import ModalDialog from '@mui/joy/ModalDialog';
 import { IoIosRemoveCircleOutline } from "react-icons/io";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import { IoIosAddCircleOutline } from "react-icons/io";
-import { useEffect } from "react";
-import { fetchProgram, } from '../../feature/ProgramSlice';
+import { useEffect, useState } from "react";
+import { fetchProgram, addProgram } from '../../feature/ProgramSlice';
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -14,6 +14,7 @@ import { Card } from "../../components/Card";
 import TextField from '@mui/material/TextField';
 
 const Program = () => {
+    const [editMode, setEditMode] = useState(false);
     const dispatch = useDispatch();
     const { loading, ProgramList, error, response } = useSelector(
         (state) => state.Program
@@ -22,18 +23,11 @@ const Program = () => {
         dispatch(fetchProgram());
     }, []);
 
-    // Check if ProgramList has data
     if (ProgramList.length > 0) {
-        // Loop through each program in ProgramList
         ProgramList.forEach(program => {
-            // console.log(program);
-
-            // Check if the program has a 'stage' array and it's not empty
             if (program.stage && program.stage.length > 0) {
-                // Loop through each stage in the program
                 program.stage.forEach(stage => {
-                    // Log the id of each stage
-                    console.log(stage.pivot.attribute_name);
+                    // console.log(stage.pivot);
                 });
             }
         });
@@ -73,6 +67,31 @@ const Program = () => {
         }
     };
 
+    const [cultur_name, setCultur_name] = useState("");
+    const [program_name, setProgram_name] = useState("");
+    const [stage_name, setStage_name] = useState([]);
+    const [attribute_name, setAttribute_name] = useState([]);
+    const [attribute_value, setAttribute_value] = useState([]);
+
+
+    const handleClick = (e) => {
+        e.preventDefault();
+        dispatch(
+            addProgram({
+                cultur_name: cultur_name,
+                program_name: program_name,
+                stage_name: [stage_name],
+                attribute_name: [attribute_name],
+                attribute_value: [attribute_value],
+            })
+        );
+        setCultur_name("");
+        setProgram_name("");
+        setStage_name([]);
+        setAttribute_name([])
+        setAttribute_value([]);
+        // setOpen(false);
+    };
 
     return (
         <div className="">
@@ -108,7 +127,7 @@ const Program = () => {
                                         color="neutral"
                                         startDecorator={ <Add /> }
                                         onClick={ () => setOpen(true) }>
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-5 h-5">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
                                         <span>Add program</span>
@@ -117,20 +136,28 @@ const Program = () => {
                                         <ModalDialog className='w-full '>
                                             <h1 className='text-center font-bold text-4xl'>Create new Program</h1>
                                             <form
-                                                onSubmit={ (event) => {
-                                                    event.preventDefault();
-                                                    setOpen(false);
-                                                } }
                                                 className='w-full'
                                             >
                                                 <div className='gap-12 mx-auto flex sm:flex-nowrap flex-wrap'>
 
                                                     <div className='lg:w-100 md:w-1/2 sm:w-1/2 my-3'>
-                                                        <TextField variant="standard" label="Name" className="w-full rounded-md border border-gray-300 dark:border-gray-700" />
+                                                        <TextField variant="standard" label="Name" className="w-full rounded-md border border-gray-300 dark:border-gray-700" type='text' name='program_name'
+
+                                                            value={ program_name }
+                                                            onChange={ (e) => {
+                                                                setProgram_name(e.target.value);
+                                                            } }
+                                                        />
 
                                                     </div>
                                                     <div className='lg:w-100 md:w-1/2 sm:w-1/2 my-3'>
-                                                        <TextField variant="standard" label="Culture" className="w-full rounded-md border border-gray-300 dark:border-gray-700" />
+                                                        <TextField variant="standard" label="Culture" className="w-full rounded-md border border-gray-300 dark:border-gray-700"
+                                                            type='text' name='cultur_name'
+                                                            value={ cultur_name }
+                                                            onChange={ (e) => {
+                                                                setCultur_name(e.target.value);
+                                                            } }
+                                                        />
 
                                                     </div>
                                                 </div>
@@ -140,7 +167,15 @@ const Program = () => {
                                                         <h1 className='font-bold'>Stages</h1>
                                                         { formStage.map((element, i) => (
                                                             <div className="lg:w-100 md:w-1/2 sm:w-1/2 my-3" key={ i }>
-                                                                <TextField variant="standard" label="Stage" className="w-full rounded-md border border-gray-300 dark:border-gray-700" onChange={ (e) => handleChange("stage", i, e) } />
+                                                                <TextField variant="standard" label="Stage" className="w-full rounded-md border border-gray-300 dark:border-gray-700"
+                                                                    type='text' name='stage_name[]'
+                                                                    value={ stage_name }
+
+                                                                    onChange={ (e) => {
+                                                                        setStage_name(e.target.value);
+                                                                    } }
+
+                                                                />
                                                                 { i ? (
                                                                     <IoIosRemoveCircleOutline className='my-3 ' onClick={ () => removeFormFields("stage", i) } />
                                                                 ) : null }
@@ -150,12 +185,20 @@ const Program = () => {
                                                             <IoIosAddCircleOutline onClick={ () => addFormFields("stage") } />
                                                         </div>
                                                     </div>
-
+                                                    <input type="hidden" name="attribute_value[]" value={ attribute_value } />
                                                     <div className="lg:w-100 md:w-1/2 sm:w-1/2 my-3">
                                                         <h1 className='font-bold'>Attributes</h1>
                                                         { formAttribute.map((element, i) => (
                                                             <div className="lg:w-100 md:w-1/2 sm:w-1/2 my-3" key={ i }>
-                                                                <TextField variant="standard" label="Attribute" className="w-full rounded-md border border-gray-300 dark:border-gray-700" onChange={ (e) => handleChange("attribute", i, e) } />
+                                                                <TextField variant="standard" label="Attribute" className="w-full rounded-md border border-gray-300 dark:border-gray-700"
+                                                                    type='text' name='attribute_name[]'
+                                                                    value={ attribute_name }
+
+                                                                    onChange={ (e) => {
+                                                                        setAttribute_name(e.target.value);
+                                                                    } }
+
+                                                                />
                                                                 { i ? (
                                                                     <IoIosRemoveCircleOutline className='my-3 ' onClick={ () => removeFormFields("attribute", i) } />
                                                                 ) : null }
@@ -168,7 +211,13 @@ const Program = () => {
                                                 </div>
                                                 <div className='mx-auto mt-4 '>
 
-                                                    <button type="submit" className="bg-green-900 text-white dark:bg-[#343338] hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center text-lg dark:hover:bg-green-900 dark:focus:ring-blue-800 w-[100%] ">Submit</button>
+                                                    <button type="submit" className="bg-green-900 text-white dark:bg-[#343338] hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center text-lg dark:hover:bg-green-900 dark:focus:ring-blue-800 w-[100%] "
+
+                                                        onClick={ (e) => {
+                                                            handleClick(e);
+                                                        } }
+
+                                                    >Submit</button>
                                                 </div>
                                             </form>
                                         </ModalDialog>
@@ -201,36 +250,26 @@ const Program = () => {
                                                                 ))
                                                             ) }
                                                         </tr>
-
-
-
                                                     </thead>
-                                                    <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-[#343338] dark:hover:bg-gray-50 ">
-                                                        <tr className="text-gray-700 dark:bg-gray-700 dark:text-gray-100  bg-green-100  dark:hover:text-gray-200 dark:hover:bg-gray-600">
-                                                            <td className="px-4 py-3">Stage 1</td>
-                                                            <td className="px-4 py-3">15</td>
-                                                            <td className="px-4 py-3">1.3</td>
-                                                            <td className="px-4 py-3">2.2</td>
-                                                            <td className="px-4 py-3">2.4</td>
-                                               
-                                                        </tr>
-                                                        <tr className="text-gray-700 dark:bg-gray-700 dark:text-gray-100  bg-green-100  dark:hover:text-gray-200 dark:hover:bg-gray-600">
-                                                            <td className="px-4 py-3">Stage 1</td>
-                                                            <td className="px-4 py-3">15</td>
-                                                            <td className="px-4 py-3">1.3</td>
-                                                            <td className="px-4 py-3">2.2</td>
-                                                            <td className="px-4 py-3">2.4</td>
-                                               
-                                                        </tr>
-                                                        <tr className="text-gray-700 dark:bg-gray-700 dark:text-gray-100  bg-green-100  dark:hover:text-gray-200 dark:hover:bg-gray-600">
-                                                            <td className="px-4 py-3">Stage 1</td>
-                                                            <td className="px-4 py-3">15</td>
-                                                            <td className="px-4 py-3">1.3</td>
-                                                            <td className="px-4 py-3">2.2</td>
-                                                            <td className="px-4 py-3">2.4</td>
-                                               
-                                                        </tr>
+                                                    <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-[#343338] dark:hover:bg-gray-50">
+                                                        { [...new Set(program.stage.map(stage => {
+                                                            return stage.stage_name;
+                                                        }))].map((stageName, index) => (
+                                                            <tr key={ index } className="text-gray-700 dark:bg-gray-700 dark:text-gray-100 bg-green-100 dark:hover:text-gray-200 dark:hover:bg-gray-600">
+                                                                <td contentEditable={ editMode ? 'true' : 'false' } className="px-4 py-3">{ stageName }</td>
+                                                                <td contentEditable={ editMode ? 'true' : 'false' } className="px-4 py-3">2.4</td>
+                                                                { program.stage
+                                                                    .filter(stage => stage.stage_name === stageName)
+                                                                    .map((stage, attrIndex) => {
+                                                                        return (
+                                                                            <td key={ attrIndex } contentEditable={ editMode ? 'true' : 'false' } className="px-4 py-3">{ stage.pivot.attribute_value }</td>
+                                                                        );
+                                                                    }) }
+                                                            </tr>
+                                                        )) }
                                                     </tbody>
+
+
                                                 </table>
                                             </div>
                                         </div>
@@ -239,9 +278,11 @@ const Program = () => {
                             </TabPanels>
                         </Tabs>
 
+                        <button
+                            onClick={ () => setEditMode(!editMode) }
+                        >edit</button>
 
                     </div>
-
 
                 </div>
             </div>
