@@ -6,6 +6,8 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { useEffect, useState } from "react";
 import { fetchProgram, addProgram } from '../../feature/ProgramSlice';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -23,49 +25,18 @@ const Program = () => {
         dispatch(fetchProgram());
     }, []);
 
-    if (ProgramList.length > 0) {
-        ProgramList.forEach(program => {
-            if (program.stage && program.stage.length > 0) {
-                program.stage.forEach(stage => {
-                    // console.log(stage.pivot);
-                });
-            }
-        });
-    }
-    const [open, setOpen] = React.useState(false);
-    const [formStage, setFormStage] = React.useState([{ name: "" }])
-    const [formAttribute, setformAttribute] = React.useState([{ name: "" }])
-    const handleChange = (type, i, e) => {
-        if (type === "stage") {
-            const newFormStage = [...formStage];
-            newFormStage[i][e.target.name] = e.target.value;
-            setFormStage(newFormStage);
-        } else if (type === "attribute") {
-            const newFormAttribute = [...formAttribute];
-            newFormAttribute[i][e.target.name] = e.target.value;
-            setformAttribute(newFormAttribute);
-        }
-    };
+    // if (ProgramList.length > 0) {
+    //     ProgramList.forEach(program => {
+    //         if (program.stage && program.stage.length > 0) {
+    //             program.stage.forEach(stage => {
+    //                 // console.log(stage.pivot);
+    //             });
+    //         }
+    //     });
+    // }
+    const [open, setOpen] = useState(false);
 
-    const addFormFields = (type) => {
-        if (type === "stage") {
-            setFormStage([...formStage, { name: "" }]);
-        } else if (type === "attribute") {
-            setformAttribute([...formAttribute, { name: "" }]);
-        }
-    };
 
-    const removeFormFields = (type, i) => {
-        if (type === "stage") {
-            const newFormStage = [...formStage];
-            newFormStage.splice(i, 1);
-            setFormStage(newFormStage);
-        } else if (type === "attribute") {
-            const newFormAttribute = [...formAttribute];
-            newFormAttribute.splice(i, 1);
-            setformAttribute(newFormAttribute);
-        }
-    };
 
     const [cultur_name, setCultur_name] = useState("");
     const [program_name, setProgram_name] = useState("");
@@ -80,18 +51,46 @@ const Program = () => {
             addProgram({
                 cultur_name: cultur_name,
                 program_name: program_name,
-                stage_name: [stage_name],
-                attribute_name: [attribute_name],
-                attribute_value: [attribute_value],
+                stage_name: stage_name,
+                attribute_name: attribute_name,
+                attribute_value: attribute_value,
             })
         );
+        console.log("Attribute Value:", attribute_name);
+        console.log("stage Value:", stage_name);
         setCultur_name("");
         setProgram_name("");
         setStage_name([]);
         setAttribute_name([])
         setAttribute_value([]);
-        // setOpen(false);
+        setOpen(false);
     };
+
+
+
+    const [stageFrom, setFormStage] = useState([{ name: "" }]);
+    const [attributeFrom, setFormAttribute] = useState([{ name: "" }]);
+
+
+
+    const handleAddStage = () => {
+        setFormStage([...stageFrom, { name: "" }]);
+    }
+    const handleRemoveStage = (i) => {
+        const newStageFrom = [...stageFrom];
+        newStageFrom.splice(i, 1);
+        setFormStage(newStageFrom);
+    }
+    const handleAddAttribute = () => {
+        setFormAttribute([...attributeFrom, { name: "" }]);
+    }
+    const handleRemoveAttribute = (i) => {
+        const newAttributeFrom = [...attributeFrom];
+        newAttributeFrom.splice(i, 1);
+        setFormAttribute(newAttributeFrom);
+    }
+
+
 
     return (
         <div className="">
@@ -101,6 +100,8 @@ const Program = () => {
                 <Card title="Disputes" number="5" color="#FFBA79" />
                 <Card title="Messages" number="8" color="#FFB2D3" />
             </div>
+            <ToastContainer />
+
             <div className='pt-12 grid gap-4 md:gap-8 grid-cols-1'>
                 <div className="lg:w-full  rounded-lg overflow-hidden sm:mr-10  flex items-end justify-start relative">
                     <div className="container  mx-auto">
@@ -165,49 +166,69 @@ const Program = () => {
                                                 <div className='gap-12 mx-auto flex sm:flex-nowrap flex-wrap'>
                                                     <div className="lg:w-100 md:w-1/2 sm:w-1/2 my-3">
                                                         <h1 className='font-bold'>Stages</h1>
-                                                        { formStage.map((element, i) => (
-                                                            <div className="lg:w-100 md:w-1/2 sm:w-1/2 my-3" key={ i }>
-                                                                <TextField variant="standard" label="Stage" className="w-full rounded-md border border-gray-300 dark:border-gray-700"
-                                                                    type='text' name='stage_name[]'
-                                                                    value={ stage_name }
 
-                                                                    onChange={ (e) => {
-                                                                        setStage_name(e.target.value);
-                                                                    } }
+                                                        <div className="lg:w-100 md:w-1/2 sm:w-1/2 my-3">
+                                                            { stageFrom.map((stage, i) => (
+                                                                <div key={ i }>
+                                                                    <TextField
+                                                                        variant="standard"
+                                                                        label="Stage"
+                                                                        className="w-full rounded-md border border-gray-300 dark:border-gray-700"
+                                                                        type="text"
+                                                                        name="stage_name[]"
+                                                                        value={ stage.name }
+                                                                        onChange={ (e) => {
+                                                                            const updatedStages = [...stageFrom];
+                                                                            updatedStages[i].name = e.target.value;
+                                                                            setFormStage(updatedStages);
+                                                                            const stageNames = updatedStages.map((stage) => stage.name);
+                                                                            setStage_name(stageNames);
+                                                                        } }
+                                                                    />
 
-                                                                />
-                                                                { i ? (
-                                                                    <IoIosRemoveCircleOutline className='my-3 ' onClick={ () => removeFormFields("stage", i) } />
-                                                                ) : null }
-                                                            </div>
-                                                        )) }
+                                                                    <IoIosRemoveCircleOutline className="my-3" onClick={ () => handleRemoveStage(i) } />
+                                                                </div>
+                                                            )) }
+                                                        </div>
+
+
                                                         <div className="mt-3">
-                                                            <IoIosAddCircleOutline onClick={ () => addFormFields("stage") } />
+                                                            <IoIosAddCircleOutline onClick={ handleAddStage } />
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div className="lg:w-100 md:w-1/2 sm:w-1/2 my-3">
+                                                        <h1 className='font-bold'>Attributes</h1>
+                                                        <div className="lg:w-100 md:w-1/2 sm:w-1/2 my-3">
+                                                            { attributeFrom.map((attribute, i) => (
+                                                                <div key={ i }>
+                                                                    <TextField
+                                                                        variant="standard"
+                                                                        label="Attribute"
+                                                                        className="w-full rounded-md border border-gray-300 dark:border-gray-700"
+                                                                        type="text"
+                                                                        name="attribute_name[]"
+                                                                        value={ attribute.name }
+                                                                        onChange={ (e) => {
+                                                                            const updatedAttributes = [...attributeFrom];
+                                                                            updatedAttributes[i].name = e.target.value;
+                                                                            setFormAttribute(updatedAttributes);
+                                                                            const attributeNames = updatedAttributes.map((attribute) => attribute.name);
+                                                                            setAttribute_name(attributeNames);
+                                                                        } }
+                                                                    />
+
+                                                                    <IoIosRemoveCircleOutline className="my-3" onClick={ () => handleRemoveAttribute(i) } />
+                                                                </div>
+                                                            )) }
+                                                        </div>
+
+                                                        <div className="mt-3">
+                                                            <IoIosAddCircleOutline onClick={ handleAddAttribute } />
                                                         </div>
                                                     </div>
                                                     <input type="hidden" name="attribute_value[]" value={ attribute_value } />
-                                                    <div className="lg:w-100 md:w-1/2 sm:w-1/2 my-3">
-                                                        <h1 className='font-bold'>Attributes</h1>
-                                                        { formAttribute.map((element, i) => (
-                                                            <div className="lg:w-100 md:w-1/2 sm:w-1/2 my-3" key={ i }>
-                                                                <TextField variant="standard" label="Attribute" className="w-full rounded-md border border-gray-300 dark:border-gray-700"
-                                                                    type='text' name='attribute_name[]'
-                                                                    value={ attribute_name }
-
-                                                                    onChange={ (e) => {
-                                                                        setAttribute_name(e.target.value);
-                                                                    } }
-
-                                                                />
-                                                                { i ? (
-                                                                    <IoIosRemoveCircleOutline className='my-3 ' onClick={ () => removeFormFields("attribute", i) } />
-                                                                ) : null }
-                                                            </div>
-                                                        )) }
-                                                        <div className="mt-3">
-                                                            <IoIosAddCircleOutline onClick={ () => addFormFields("attribute") } />
-                                                        </div>
-                                                    </div>
                                                 </div>
                                                 <div className='mx-auto mt-4 '>
 
