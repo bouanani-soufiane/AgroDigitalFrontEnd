@@ -2,17 +2,26 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
-  user: {},
-  isLoggedIn: false,
-  didLogout: false,
-  isLoading: true,
-  token: "",
-  error: null,
-  role: null,
+    user: {},
+    UserList : [],
+    isLoggedIn: false,
+    didLogout: false,
+    isLoading: true,
+    token: "",
+    error: null,
+    role: null,
 };
 // const resetState = (state) => {
 //   Object.assign(state, initialState);
 // };
+export const fetchUser = createAsyncThunk(
+    'user/fetchUser',
+    async () => {
+        const response = await axios.get(`http://localhost/api/v1/users`);
+        // console.log(response.data.data);
+        return response.data.data;
+    }
+);
 
 export const LoginUser = createAsyncThunk(
     'user/loginUser',
@@ -42,56 +51,40 @@ const UserSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-  logout: (state) => {
-    // Clear user data, token, and role
-    state.user = {};
-    state.token = "";
-    state.role = null;
-    state.isLoggedIn = false;
-    state.didLogout = true;
+        logout: (state) => {
+            state.user = {};
+            state.token = "";
+            state.role = null;
+            state.isLoggedIn = false;
+            state.didLogout = true;
 
-    const user = JSON.parse(localStorage.getItem('user'));
-    console.log(user.access_token);
+            const user = JSON.parse(localStorage.getItem('user'));
+            console.log(user.access_token);
 
-    axios.post('http://localhost/api/v1/logout', {}, {
-        headers: {'Authorization': `Bearer ${user.access_token}`}
-    })
-    .then(() => console.log('Logged out from server'))
-    .catch((error) => console.error(error));
+            axios.post('http://localhost/api/v1/logout', {}, {
+                headers: { 'Authorization': `Bearer ${user.access_token}` }
+            })
+                .then(() => console.log('Logged out from server'))
+                .catch((error) => console.error(error));
 
-    localStorage.removeItem("user");
+            localStorage.removeItem("user");
+        },
     },
-
-    // checkUser: (state) => {
-    //   const creds = decryptData();
-    //     if (creds.user) {
-    //         state.user = creds.user;
-    //         state.token = creds.token;
-    //         state.isLoggedIn = true;
-    //         state.role = creds.user.role.name;
-    //     } else {
-    //         state.user = {};
-    //         state.token = "";
-    //         state.status = null;
-    //         state.role = null;
-    //   }
-    // },
-  },
     extraReducers: (builder) => {
         builder
             .addCase(LoginUser.pending, (state) => {
                 state.isLoading = true,
-                state.user = null,
-                state.error = null
+                    state.user = null,
+                    state.error = null
             })
             .addCase(LoginUser.fulfilled, (state, action) => {
                 state.isLoggedIn = true,
-                state.didLogout = false,
-                state.isLoading = false,
-                state.user = action.payload,
-                console.log(state.token),
+                    state.didLogout = false,
+                    state.isLoading = false,
+                    state.user = action.payload,
+                    console.log(state.token),
 
-                state.error = null
+                    state.error = null
             })
             .addCase(LoginUser.rejected, (state, action) => {
                 state.isLoading = false,
@@ -116,14 +109,22 @@ const UserSlice = createSlice({
                     console.log("Registered successfully");
                 }
             })
-           .addCase(RegisterUser.pending, (state, action) => {
+            .addCase(RegisterUser.pending, (state, action) => {
                 state.isLoading = true;
             })
-           .addCase(RegisterUser.rejected, (state, action) => {
+            .addCase(RegisterUser.rejected, (state, action) => {
                 // console.log(action.error.message);
                 state.isLoading = false;
                 state.error = action.error.message;
-           })
+            })
+        builder
+            .addCase(fetchUser.fulfilled, (state, action) => {
+                state.UserList = action.payload
+                // console.log(state.UserList);
+            })
+            .addCase(fetchUser.rejected, (state, action) => {
+                state.error = action.error.message;
+            });
 
     }
 });

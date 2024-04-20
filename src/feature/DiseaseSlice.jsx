@@ -42,9 +42,7 @@ export const addDisease = createAsyncThunk(
 export const removeDisease = createAsyncThunk(
   "Disease/removeDisease",
   async (data) => {
-    const response = await axios.delete(
-      `http://localhost/api/v1/diseases/${data}`
-    );
+    const response = await axios.delete(`http://localhost/api/v1/diseases/${data}`);
     console.log("Response from server:", response.data.data);
 
     return response.data;

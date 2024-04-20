@@ -4,12 +4,12 @@ import ModalDialog from '@mui/joy/ModalDialog';
 import { useDispatch, useSelector } from "react-redux";
 import Add from '@mui/icons-material/Add';
 import { Card } from "../../components/Card";
-import { addDisease, fetchDisease, removeDisease} from '../../feature/DiseaseSlice';
+import { addDisease, fetchDisease, removeDisease } from '../../feature/DiseaseSlice';
 import { useEffect } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 const Maladie = () => {
-  const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false);
 
 
     const dispatch = useDispatch();
@@ -121,9 +121,7 @@ const Maladie = () => {
 
                                             <div className="flex items-center justify-between">
                                                 <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                                                    onClick={ (e) => {
-                                                        handleClick(e);
-                                                    } }
+                                                    onClick={ (e) => { handleClick(e) } }
                                                 >
                                                     Create Product
                                                 </button>

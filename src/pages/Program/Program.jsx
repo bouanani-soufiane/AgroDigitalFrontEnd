@@ -5,7 +5,7 @@ import { IoIosRemoveCircleOutline } from "react-icons/io";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { useEffect, useState } from "react";
-import { fetchProgram, addProgram } from '../../feature/ProgramSlice';
+import { fetchProgram, addProgram, finishProgram, deleteProgram } from '../../feature/ProgramSlice';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -21,29 +21,65 @@ const Program = () => {
     const { loading, ProgramList, error, response } = useSelector(
         (state) => state.Program
     );
+
+    const [attValues, setAttValues] = useState([]);
+
+
+    const handleChange = (programId, stageId, attribute, e) => {
+        console.log('prog', programId);
+        console.log('stage', stageId);
+        console.log('attr', attribute);
+        console.log('value', e);
+
+        const updatedValues = [...attValues];
+        updatedValues.push({ programId, stageId, attribute, value: e });
+
+        setAttValues(updatedValues);
+    };
+
+
+
+
+
+
     useEffect(() => {
         dispatch(fetchProgram());
     }, []);
+    const [dataAttribute, setDataAttribute] = useState([]);
 
-    // if (ProgramList.length > 0) {
-    //     ProgramList.forEach(program => {
-    //         if (program.stage && program.stage.length > 0) {
-    //             program.stage.forEach(stage => {
-    //                 // console.log(stage.pivot);
-    //             });
-    //         }
-    //     });
-    // }
+    useEffect(() => {
+        const newDataAttribute = [];
+        ProgramList.forEach(program => {
+            if (program.stage && program.stage.length > 0) {
+                program.stage.forEach(stage => {
+                    newDataAttribute.push({
+                        programId: stage.pivot.program_id,
+                        stageId: stage.pivot.stage_id,
+                        attributeId: stage.pivot.id,
+                    });
+                    // console.log(stage.pivot.program_id);
+                });
+            }
+        });
+        setDataAttribute(newDataAttribute);
+    }, [ProgramList]);
+
+    if (ProgramList.length > 0) {
+        ProgramList.forEach(program => {
+            if (program.stage && program.stage.length > 0) {
+                program.stage.forEach(stage => {
+                    // console.log(stage.pivot);
+                });
+            }
+        });
+    }
     const [open, setOpen] = useState(false);
-
-
 
     const [cultur_name, setCultur_name] = useState("");
     const [program_name, setProgram_name] = useState("");
     const [stage_name, setStage_name] = useState([]);
     const [attribute_name, setAttribute_name] = useState([]);
     const [attribute_value, setAttribute_value] = useState([]);
-
 
     const handleClick = (e) => {
         e.preventDefault();
@@ -56,8 +92,6 @@ const Program = () => {
                 attribute_value: attribute_value,
             })
         );
-        console.log("Attribute Value:", attribute_name);
-        console.log("stage Value:", stage_name);
         setCultur_name("");
         setProgram_name("");
         setStage_name([]);
@@ -67,11 +101,19 @@ const Program = () => {
     };
 
 
+    const handleFinishProgram = (e) => {
+        e.preventDefault();
+        dispatch(
+            finishProgram(
+                 attValues
+            )
+        );
+        console.log(attValues);
+
+    };
 
     const [stageFrom, setFormStage] = useState([{ name: "" }]);
     const [attributeFrom, setFormAttribute] = useState([{ name: "" }]);
-
-
 
     const handleAddStage = () => {
         setFormStage([...stageFrom, { name: "" }]);
@@ -90,7 +132,10 @@ const Program = () => {
         setFormAttribute(newAttributeFrom);
     }
 
-
+    const handleDeleteProgram = (id) => {
+        dispatch(deleteProgram(id));
+        dispatch(fetchProgram());
+    };
 
     return (
         <div className="">
@@ -149,7 +194,6 @@ const Program = () => {
                                                                 setProgram_name(e.target.value);
                                                             } }
                                                         />
-
                                                     </div>
                                                     <div className='lg:w-100 md:w-1/2 sm:w-1/2 my-3'>
                                                         <TextField variant="standard" label="Culture" className="w-full rounded-md border border-gray-300 dark:border-gray-700"
@@ -159,14 +203,12 @@ const Program = () => {
                                                                 setCultur_name(e.target.value);
                                                             } }
                                                         />
-
                                                     </div>
                                                 </div>
                                                 <hr className='border-1 mt-4' />
                                                 <div className='gap-12 mx-auto flex sm:flex-nowrap flex-wrap'>
                                                     <div className="lg:w-100 md:w-1/2 sm:w-1/2 my-3">
                                                         <h1 className='font-bold'>Stages</h1>
-
                                                         <div className="lg:w-100 md:w-1/2 sm:w-1/2 my-3">
                                                             { stageFrom.map((stage, i) => (
                                                                 <div key={ i }>
@@ -185,19 +227,14 @@ const Program = () => {
                                                                             setStage_name(stageNames);
                                                                         } }
                                                                     />
-
                                                                     <IoIosRemoveCircleOutline className="my-3" onClick={ () => handleRemoveStage(i) } />
                                                                 </div>
                                                             )) }
                                                         </div>
-
-
                                                         <div className="mt-3">
                                                             <IoIosAddCircleOutline onClick={ handleAddStage } />
                                                         </div>
                                                     </div>
-
-
                                                     <div className="lg:w-100 md:w-1/2 sm:w-1/2 my-3">
                                                         <h1 className='font-bold'>Attributes</h1>
                                                         <div className="lg:w-100 md:w-1/2 sm:w-1/2 my-3">
@@ -218,12 +255,10 @@ const Program = () => {
                                                                             setAttribute_name(attributeNames);
                                                                         } }
                                                                     />
-
                                                                     <IoIosRemoveCircleOutline className="my-3" onClick={ () => handleRemoveAttribute(i) } />
                                                                 </div>
                                                             )) }
                                                         </div>
-
                                                         <div className="mt-3">
                                                             <IoIosAddCircleOutline onClick={ handleAddAttribute } />
                                                         </div>
@@ -231,14 +266,8 @@ const Program = () => {
                                                     <input type="hidden" name="attribute_value[]" value={ attribute_value } />
                                                 </div>
                                                 <div className='mx-auto mt-4 '>
-
                                                     <button type="submit" className="bg-green-900 text-white dark:bg-[#343338] hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center text-lg dark:hover:bg-green-900 dark:focus:ring-blue-800 w-[100%] "
-
-                                                        onClick={ (e) => {
-                                                            handleClick(e);
-                                                        } }
-
-                                                    >Submit</button>
+                                                        onClick={ (e) => { handleClick(e); } }>Submit</button>
                                                 </div>
                                             </form>
                                         </ModalDialog>
@@ -249,7 +278,7 @@ const Program = () => {
                         <Tabs variant='soft-rounded' colorScheme='green'>
                             <TabList>
                                 { ProgramList.map(program => (
-                                    <Tab className='font-semibold bg-green-200 py-2 px-4 rounded-full mr-4' >Raspberry</Tab>
+                                    <Tab className='font-semibold bg-green-200 py-2 px-4 rounded-full mr-4' >{ program.program_name}</Tab>
                                 )) }
                             </TabList>
                             <TabPanels>
@@ -259,8 +288,6 @@ const Program = () => {
                                             <div className="overflow-x-auto  rounded-lg shadow">
                                                 <table className="w-full whitespace-nowrap">
                                                     <thead>
-
-
                                                         <tr className="text-xs font-semibold tracking-wide text-left uppercase border-b dark:border-gray-700 bg-green-900 text-white dark:text-gray-400 dark:hover:text-gray-900 dark:bg-[#343338] dark:hover:bg-gray-50">
                                                             <th className="px-4 py-3">Stage</th>
                                                             <th className="px-4 py-3">days</th>
@@ -282,29 +309,50 @@ const Program = () => {
                                                                 { program.stage
                                                                     .filter(stage => stage.stage_name === stageName)
                                                                     .map((stage, attrIndex) => {
+                                                                        const programId = ProgramList.findIndex(p => p.id === stage.pivot.program_id);
+                                                                        const stageId = stage.pivot.stage_id;
+                                                                        const attribute = stage.pivot.attribute_name;
+                                                                        // { console.log("hi", stage.pivot.attribute_name)}
                                                                         return (
-                                                                            <td key={ attrIndex } contentEditable={ editMode ? 'true' : 'false' } className="px-4 py-3">{ stage.pivot.attribute_value }</td>
+                                                                            <td key={ attrIndex } className="px-4 py-3">
+                                                                                <input
+                                                                                    type="number"
+                                                                                    className="bg-gray-700 text-center"
+
+                                                                                    defaultValue={ stage.pivot.attribute_value }
+                                                                                    onChange={ (e) => handleChange(programId + 1, stageId, attribute, e.target.value) }
+                                                                                />
+                                                                            </td>
                                                                         );
                                                                     }) }
                                                             </tr>
                                                         )) }
                                                     </tbody>
-
-
                                                 </table>
                                             </div>
                                         </div>
+                                        <button
+                                            class="mt-4 middle none center mr-4 rounded-lg bg-green-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                                            data-ripple-light="true"
+                                            onClick={ (e) => { handleFinishProgram(e); } }
+                                        >
+                                            save
+                                        </button>
+
+                                        <button
+                                            class="mt-4 middle none center mr-4 rounded-lg bg-red-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-red-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                                            data-ripple-light="true"
+                                            onClick={ () => handleDeleteProgram(program.id) }
+                                        >
+                                            delete program  { program.id }
+                                        </button>
+
+
                                     </TabPanel>
                                 )) }
                             </TabPanels>
                         </Tabs>
-
-                        <button
-                            onClick={ () => setEditMode(!editMode) }
-                        >edit</button>
-
                     </div>
-
                 </div>
             </div>
         </div>
