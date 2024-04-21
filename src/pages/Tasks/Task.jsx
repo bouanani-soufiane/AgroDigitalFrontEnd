@@ -29,8 +29,7 @@ const Task = () => {
     }
 
     const handleUpdateTask = () => {
-        // console.log(id, '|', name, ' | ', Description, ' | ', DateStart, ' | ', DateEnd, ' | ', Status, ' | ', TypeTask, ' | ', employee_id);
-        // console.log("Update");
+
         dispatch(UpdateTask({
             id: id,
             name: name,
@@ -133,13 +132,12 @@ const Task = () => {
 
                                         <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500 text-gray-900 dark:text-white text-sm leading-5">{ task.DateEnd }</td>
 
-
-
                                         <td className="px-6 py-4 whitespace-no-wrap border-b text-gray-900 dark:text-white border-gray-500 text-sm leading-5">
-                                            <span className="relative inline-block px-3 py-1 font-semibold text-green-100 leading-tight">
-                                                <span aria-hidden className="absolute inset-0 bg-green-500 opacity-50 rounded-full"></span>
+                                            <span className="relative inline-block px-3 py-1 font-semibold text-gray-100 leading-tight">
+                                                <span aria-hidden className={ `absolute inset-0 opacity-50 rounded-full ${task.Status === 'Done' ? 'bg-green-500' : task.Status === 'Pending' ? 'bg-gray-500' : task.Status === 'Cancelled' ? 'bg-red-500' : ''}` } ></span>
                                                 <span className="relative text-xs">{ task.Status }</span>
                                             </span>
+
                                         </td>
                                         <td className="flex px-6 py-4 whitespace-no-wrap border-b text-gray-900 dark:text-white border-gray-500 text-sm leading-5">
                                             <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-red-500 rounded-lg shrink-0 sm:w-auto gap-x-2 hover:bg-red-600 dark:hover:bg-red-500 dark:bg-red-900 ml-3"

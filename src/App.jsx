@@ -1,10 +1,21 @@
 import { Sidebar } from "./components/Sidebar";
 import { Navbar } from "./components/Navbar";
-import { useState } from "react";
 import { Outlet } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
 
 const App = () => {
   const [activeMenu, setActiveMenu] = useState(true);
+  const navigate = useNavigate();
+
+  const { user, isLoggedIn, didLogout } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (!isLoggedIn && didLogout) {
+      navigate("/login");
+    }
+  }, [isLoggedIn, navigate]);
+
   return (
     <div className="App">
       <div className=" flex relative dark:bg-main-dark-bg">

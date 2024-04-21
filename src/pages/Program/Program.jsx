@@ -26,10 +26,10 @@ const Program = () => {
 
 
     const handleChange = (programId, stageId, attribute, e) => {
-        console.log('prog', programId);
-        console.log('stage', stageId);
-        console.log('attr', attribute);
-        console.log('value', e);
+        // console.log('prog', programId);
+        // console.log('stage', stageId);
+        // console.log('attr', attribute);
+        // console.log('value', e);
 
         const updatedValues = [...attValues];
         updatedValues.push({ programId, stageId, attribute, value: e });
@@ -105,10 +105,10 @@ const Program = () => {
         e.preventDefault();
         dispatch(
             finishProgram(
-                 attValues
+                attValues
             )
         );
-        console.log(attValues);
+        console.log('dtdtd', attValues);
 
     };
 
@@ -277,10 +277,16 @@ const Program = () => {
                         </div>
                         <Tabs variant='soft-rounded' colorScheme='green'>
                             <TabList>
-                                { ProgramList.map(program => (
-                                    <Tab className='font-semibold bg-green-200 py-2 px-4 rounded-full mr-4' >{ program.program_name}</Tab>
+                                { ProgramList.map((program, index) => (
+                                    <Tab
+                                        className={ `font-semibold py-2 px-4 rounded-full mr-4 ${index % 2 === 0 ? 'bg-green-200' : 'bg-red-100'
+                                            }` }
+                                    >
+                                        { program.program_name }
+                                    </Tab>
                                 )) }
                             </TabList>
+
                             <TabPanels>
                                 { ProgramList.map(program => (
                                     <TabPanel>
@@ -304,8 +310,11 @@ const Program = () => {
                                                             return stage.stage_name;
                                                         }))].map((stageName, index) => (
                                                             <tr key={ index } className="text-gray-700 dark:bg-gray-700 dark:text-gray-100 bg-green-100 dark:hover:text-gray-200 dark:hover:bg-gray-600">
-                                                                <td contentEditable={ editMode ? 'true' : 'false' } className="px-4 py-3">{ stageName }</td>
-                                                                <td contentEditable={ editMode ? 'true' : 'false' } className="px-4 py-3">2.4</td>
+                                                                <td className="px-4 py-3">{ stageName }</td>
+                                                                <td className="px-4 py-3">
+                                                                    <input type="text" name="" className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-700" defaultValue={ 15 }
+                                                                    />
+                                                                </td>
                                                                 { program.stage
                                                                     .filter(stage => stage.stage_name === stageName)
                                                                     .map((stage, attrIndex) => {
@@ -313,12 +322,13 @@ const Program = () => {
                                                                         const stageId = stage.pivot.stage_id;
                                                                         const attribute = stage.pivot.attribute_name;
                                                                         // { console.log("hi", stage.pivot.attribute_name)}
+                                                                        { console.log("here", stageId) }
+
                                                                         return (
                                                                             <td key={ attrIndex } className="px-4 py-3">
                                                                                 <input
                                                                                     type="number"
-                                                                                    className="bg-gray-700 text-center"
-
+                                                                                    className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-700"
                                                                                     defaultValue={ stage.pivot.attribute_value }
                                                                                     onChange={ (e) => handleChange(programId + 1, stageId, attribute, e.target.value) }
                                                                                 />
