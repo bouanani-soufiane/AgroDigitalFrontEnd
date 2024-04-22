@@ -4,6 +4,7 @@ import userReducer from './UserSlice';
 import DiseaseSlice from '../feature/DiseaseSlice';
 import ProgramSlice from '../feature/ProgramSlice';
 import TaskSlice from '../feature/TaskSlice';
+import ReportSlice from '../feature/ReportSlice';
 
 const store = configureStore({
     reducer: {
@@ -11,6 +12,7 @@ const store = configureStore({
         Disease: DiseaseSlice,
         Program: ProgramSlice,
         Task: TaskSlice,
+        Report : ReportSlice
     }
 });
 

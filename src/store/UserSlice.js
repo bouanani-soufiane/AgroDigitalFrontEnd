@@ -3,9 +3,8 @@ import axios from "axios";
 
 const initialState = {
     user: {},
-    UserList : [],
+    UserList: [],
     isLoggedIn: false,
-    didLogout: false,
     isLoading: true,
     token: "",
     error: null,
@@ -56,7 +55,6 @@ const UserSlice = createSlice({
             state.token = "";
             state.role = null;
             state.isLoggedIn = false;
-            state.didLogout = true;
 
             const user = JSON.parse(localStorage.getItem('user'));
             console.log(user.access_token);
@@ -79,7 +77,6 @@ const UserSlice = createSlice({
             })
             .addCase(LoginUser.fulfilled, (state, action) => {
                 state.isLoggedIn = true,
-                    state.didLogout = false,
                     state.isLoading = false,
                     state.user = action.payload,
                     console.log(state.token),

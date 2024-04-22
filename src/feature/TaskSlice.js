@@ -183,11 +183,8 @@ const TaskSlice = createSlice({
       .addCase(UpdateTask.fulfilled, (state, action) => {
         state.loading = false;
         const { id, name, Description, DateStart, DateEnd, Status, TypeTask, employee_id } = action.payload;
-
-        // Map over TaskList to find the task and update it immutably
         state.TaskList = state.TaskList.map((task) => {
           if (task.id === id) {
-            // Return a new object that spreads the existing task's properties and overwrites with the new ones
             return {
               ...task,
               name,
@@ -199,7 +196,7 @@ const TaskSlice = createSlice({
               employee_id
             };
           }
-          return task; // Return the task unchanged if it's not the one we need to update
+          return task;
         });
 
         state.response = "updated";

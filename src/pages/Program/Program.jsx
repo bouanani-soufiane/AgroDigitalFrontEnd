@@ -312,7 +312,7 @@ const Program = () => {
                                                             <tr key={ index } className="text-gray-700 dark:bg-gray-700 dark:text-gray-100 bg-green-100 dark:hover:text-gray-200 dark:hover:bg-gray-600">
                                                                 <td className="px-4 py-3">{ stageName }</td>
                                                                 <td className="px-4 py-3">
-                                                                    <input type="text" name="" className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-700" defaultValue={ 15 }
+                                                                    <input type="number" name="" className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-700" defaultValue={ 15 }
                                                                     />
                                                                 </td>
                                                                 { program.stage

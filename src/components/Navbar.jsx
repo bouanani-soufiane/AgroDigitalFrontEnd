@@ -34,11 +34,11 @@ export const Navbar = ({ activeMenu, setActiveMenu }) => {
     dispatch(logout());
     // navigate("/login");
   };
-  useEffect(() => {
-    if (!isLoggedIn && didLogout) {
-      navigate("/login");
-    }
-  }, [isLoggedIn, navigate]);
+  // useEffect(() => {
+  //   if (!isLoggedIn) {
+  //     navigate("/login");
+  //   }
+  // }, [isLoggedIn, navigate]);
 
 
   return (

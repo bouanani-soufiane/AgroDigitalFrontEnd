@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { employeeTask, markAsDone, markAsCancelled } from "../../feature/TaskSlice";
+import { addReport } from "../../feature/ReportSlice";
+
 import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Modal from '@mui/joy/Modal';
 import ModalDialog from '@mui/joy/ModalDialog';
+import { fetchDisease } from '../../feature/DiseaseSlice';
 
 
 
@@ -14,6 +17,14 @@ const Profile = () => {
     const User = useSelector(state => state.user);
     const [open, setOpen] = useState(false);
     const [id, setId] = useState("");
+
+
+    const [subject, setSubject] = useState('');
+    const [content, setContent] = useState('');
+    const [task_id, setTaskId] = useState('');
+    const [disease, setDisease] = useState('');
+    const [image, setImage] = useState('');
+
 
 
     const handleUpdateTaskClick = (id) => {
@@ -34,17 +45,40 @@ const Profile = () => {
     }
 
 
-
-
+    const { loading, DiseaseList, error, response } = useSelector(
+        (state) => state.Disease
+    );
+    console.log('dd', DiseaseList);
     useEffect(() => {
-        dispatch(employeeTask())
+        dispatch(employeeTask());
+        dispatch(fetchDisease());
+
         console.log('user task', Task);
     }, []);
 
 
+    const handleClickReport = (id) => {
+        setOpen(true);
+        setTaskId(id);
+    }
+    const handleProvidekReport = () => {
+        console.log("id", task_id);
+        const formData = new FormData();
+
+        formData.append("subject", subject);
+        formData.append("content", content);
+        formData.append("task_id", task_id);
+        formData.append("disease_id", disease);
+        formData.append("image", image);
 
 
 
+        dispatch(addReport({ formData: formData }))
+            .then(toast.success('report added'))
+            ;
+
+
+    }
 
     return (
 
@@ -190,60 +224,61 @@ const Profile = () => {
                                             <button className="flex items-center justify-center  px-5 py-2 mx-2 border-blue-500 border text-blue-500 rounded transition duration-300 hover:bg-blue-700 hover:text-white focus:outline-none font-semibold"
                                                 variant="outlined"
                                                 color="neutral"
-                                                onClick={ () => setOpen(true) }
+                                                onClick={ () => handleClickReport(task.id) }
                                             >
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                                 </svg>
                                             </button>
                                             <Modal open={ open } onClose={ () => setOpen(false) } className='container mx-auto bg'>
-                                                <ModalDialog className=' dark:bg-[#343338]'>
+                                                <ModalDialog className=' dark:bg-[#343338]  w-[1200px]'>
                                                     <h1 className='text-center font-bold text-4xl text-white'>Make new Report</h1>
-                                                    <div className="max-w-md mx-auto">
-                                                        <form className="dark:bg-[#343338] shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                                                    <div className="w-full mx-auto">
+                                                        <form className="dark:bg-[#343338] shadow-md rounded px-8 pt-6 pb-8 mb-4" encType="multipart/form-data">
                                                             <div className="mb-4">
-                                                                <label className="block text-white text-sm font-bold mb-2" htmlFor="Title">
-                                                                    Title
+                                                                <label className="block text-white text-sm font-bold mb-2" htmlFor="subject">
+                                                                    subject
                                                                 </label>
-                                                                <input className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 text-white" id="Title" type="text" placeholder="Title" name="name" />
+                                                                <input className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 text-white" id="subject" type="text" placeholder="subject" name="subject"
+
+                                                                    onChange={ (e) => setSubject(e.target.value) }
+                                                                />
                                                             </div>
                                                             <div className="mb-4">
-                                                                <label className="block text-white text-sm font-bold mb-2" htmlFor="Description">
-                                                                    Description
+                                                                <label className="block text-white text-sm font-bold mb-2" htmlFor="content">
+                                                                    content
                                                                 </label>
-                                                                <input className="shadow appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline bg-gray-700 text-white" id="Description" type="text" placeholder="Description" name="Description" />
+                                                                <input className="shadow appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline bg-gray-700 text-white" id="content" type="text" placeholder="content" name="content"
+                                                                    onChange={ (e) => setContent(e.target.value) }
+
+                                                                />
                                                             </div>
                                                             <div className="mb-4">
-                                                                <label className="block text-white text-sm font-bold mb-2" htmlFor="stock">
-                                                                    Date Start
+                                                                <label className="block text-white text-sm font-bold mb-2" htmlFor="disease">
+                                                                    Disease
                                                                 </label>
-                                                                <input className="shadow appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline bg-gray-700 text-white" id="stock" type="date" name="DateStart" placeholder="date start" />
+                                                                <div className="flex items-center space-x-4">
+                                                                    <select className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 text-white" id="disease" name="disease_id"
+                                                                        onChange={ (e) => setDisease(e.target.value) }
+                                                                    >
+                                                                        <option value="" disabled>Select disease</option>
+                                                                        { DiseaseList.map((disease) => (
+                                                                            <option value={ disease.id } >{ disease.name }</option>
+
+                                                                        )) }
+                                                                    </select>
+                                                                    <input type="file" className="shadow appearance-none border rounded py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 text-white" id="diseaseImage" name="image" accept="image/*"
+
+                                                                        onChange={ (e) => setImage(e.target.files[0]) } />
+                                                                </div>
                                                             </div>
-                                                            <div className="mb-4">
-                                                                <label className="block text-white text-sm font-bold mb-2" htmlFor="stock">
-                                                                    Date End
-                                                                </label>
-                                                                <input className="shadow appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline bg-gray-700 text-white" id="stock" type="date" name="DateEnd" placeholder="date end" />
-                                                            </div>
-                                                            <div className="mb-4">
-                                                                <label className="block text-white text-sm font-bold mb-2" htmlFor="type">
-                                                                    Type
-                                                                </label>
-                                                                <select className="shadow appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline bg-gray-700 text-white" id="type" name="TypeTask"  >
-                                                                    <option value="" disabled>Select Type</option>
-                                                                    <option value="Traitement">Traitement</option>
-                                                                    <option value="Surviance">Surviance</option>
-                                                                    <option value="Irrigation">Irrigation</option>
-                                                                    <option value="Fertigation">Fertigation</option>
-                                                                </select>
-                                                                <input type="hidden" name="Status" value="Pending" />
-                                                                <input type="hidden" name="employee_id" />
-                                                            </div>
+
 
                                                             <div className="flex items-center justify-between">
                                                                 <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button"
+                                                                    onClick={ handleProvidekReport }
                                                                 >
-                                                                    Assign task
+                                                                    provide report
                                                                 </button>
                                                             </div>
                                                         </form>

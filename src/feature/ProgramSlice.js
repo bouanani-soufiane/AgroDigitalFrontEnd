@@ -63,15 +63,12 @@ export const finishProgram = createAsyncThunk(
   }
 );
 
-
 export const deleteProgram = createAsyncThunk(
   "program/deleteProgram",
   async (data) => {
     try {
       const response = await axios.delete(`http://localhost/api/v1/programs/${data}`);
-
       console.log("delete prog response:", response.data);
-
       return response.data;
     } catch (error) {
       console.error("Error delete program:", error);
@@ -79,10 +76,6 @@ export const deleteProgram = createAsyncThunk(
     }
   }
 );
-
-
-
-
 
 const programSlice = createSlice({
   name: "program",
