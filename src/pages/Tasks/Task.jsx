@@ -76,7 +76,7 @@ const Task = () => {
                 <ToastContainer />
 
                 <div className="align-middle inline-block min-w-full shadow overflow-hidden dark:bg-[#343338] shadow-dashboard px-8 pt-3  rounded-lg pb-3">
-                    <h1 className='font-bold text-2xl mb-8 mt-2 text-white'>All Tasks </h1>
+                    <h1 className='font-bold text-2xl mb-8 mt-2 dark:text-white'>All Tasks </h1>
                     <table className="w-full dark:bg-[#343338]">
                         <thead>
                             <tr>

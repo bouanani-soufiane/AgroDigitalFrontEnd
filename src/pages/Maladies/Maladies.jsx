@@ -59,7 +59,7 @@ const Maladie = () => {
 
                 <div className="align-middle inline-block min-w-full shadow overflow-hidden dark:bg-[#343338] shadow-dashboard px-8 pt-3  rounded-lg pb-3">
                     <div className='flex justify-between mb-6 mt-2'>
-                        <h1 className='font-bold text-2xl  text-white'>All Maladies </h1>
+                        <h1 className='font-bold text-2xl  dark:text-white'>All Maladies </h1>
                         <React.Fragment>
                             <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-blue-500 rounded-lg shrink-0 sm:w-auto gap-x-2 hover:bg-blue-600 dark:hover:bg-blue-500 dark:bg-blue-900"
                                 variant="outlined"
@@ -113,9 +113,9 @@ const Maladie = () => {
                                                         setType(e.target.value);
                                                     } }>
                                                     <option value="" disabled>Select Type</option>
-                                                    <option value="biotique">Option 1</option>
-                                                    <option value="abiotique">Option 2</option>
-                                                    <option value="ravaguer">Option 3</option>
+                                                    <option value="biotique">biotique</option>
+                                                    <option value="abiotique">abiotique</option>
+                                                    <option value="ravaguer">ravaguer</option>
                                                 </select>
                                             </div>
 

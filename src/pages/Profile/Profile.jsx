@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { employeeTask, markAsDone, markAsCancelled } from "../../feature/TaskSlice";
 import { addReport } from "../../feature/ReportSlice";
+import { fetchProduct } from "../../feature/ProductSlice";
 
 import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
@@ -8,28 +9,42 @@ import 'react-toastify/dist/ReactToastify.css';
 import Modal from '@mui/joy/Modal';
 import ModalDialog from '@mui/joy/ModalDialog';
 import { fetchDisease } from '../../feature/DiseaseSlice';
-
-
+import { styled } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 10,
+});
 
 const Profile = () => {
     const dispatch = useDispatch();
     const Task = useSelector(state => state.Task);
     const User = useSelector(state => state.user);
+    const Product = useSelector(state => state.Product);
+
     const [open, setOpen] = useState(false);
     const [id, setId] = useState("");
-
 
     const [subject, setSubject] = useState('');
     const [content, setContent] = useState('');
     const [task_id, setTaskId] = useState('');
     const [disease, setDisease] = useState('');
-    const [image, setImage] = useState('');
+    const [product, setProduct] = useState([]);
 
+    const [image, setImage] = useState('');
+    const [type, setType] = useState('');
 
 
     const handleUpdateTaskClick = (id) => {
         setId(id)
-        console.log(id);
         dispatch(markAsDone({
             id: id,
         })).then(toast.success('Task marked as done!'))
@@ -38,7 +53,6 @@ const Profile = () => {
 
     const handleCancelTaskClick = (id) => {
         setId(id)
-        console.log(id);
         dispatch(markAsCancelled({
             id: id,
         })).then(toast.success('Task marked as cancelled!'))
@@ -48,21 +62,29 @@ const Profile = () => {
     const { loading, DiseaseList, error, response } = useSelector(
         (state) => state.Disease
     );
-    console.log('dd', DiseaseList);
     useEffect(() => {
         dispatch(employeeTask());
         dispatch(fetchDisease());
 
-        console.log('user task', Task);
-    }, []);
+    }, [dispatch]);
 
 
-    const handleClickReport = (id) => {
+    useEffect(() => {
+        dispatch(fetchProduct());
+    }, [dispatch])
+
+    const handleClickReport = (id, type) => {
         setOpen(true);
         setTaskId(id);
+        setType(type);
+    }
+
+
+    const handleProductChange = (e) => {
+        const selectedProducts = Array.from(e.target.selectedOptions, (option) => option.value);
+        setProduct(selectedProducts);
     }
     const handleProvidekReport = () => {
-        console.log("id", task_id);
         const formData = new FormData();
 
         formData.append("subject", subject);
@@ -70,12 +92,14 @@ const Profile = () => {
         formData.append("task_id", task_id);
         formData.append("disease_id", disease);
         formData.append("image", image);
+        formData.append("product_id", product);
 
 
 
         dispatch(addReport({ formData: formData }))
             .then(toast.success('report added'))
             ;
+        setOpen(false);
 
 
     }
@@ -144,7 +168,13 @@ const Profile = () => {
                                 <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-900 dark:text-white tracking-wider">ID</th>
                                 <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-900 dark:text-white tracking-wider">Title</th>
                                 <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-900 dark:text-white tracking-wider">Description</th>
-                                <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-900 dark:text-white tracking-wider">Task Type</th>
+
+
+                                {
+                                    User.user.role !== 'Magazinier' &&
+                                    <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-900 dark:text-white tracking-wider">Task Type</th>
+                                }
+
                                 <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-900 dark:text-white tracking-wider">Estimate</th>
                                 <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-900 dark:text-white tracking-wider">Start/end</th>
                                 <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-900 dark:text-white tracking-wider">Status</th>
@@ -173,13 +203,19 @@ const Profile = () => {
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                                        <div className="flex items-center">
-                                            <div>
-                                                <div className="text-sm leading-5 text-gray-900 dark:text-white">{ task.TypeTask }</div>
+
+                                    {
+                                        User.user.role !== 'Magazinier' &&
+
+                                        <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                                            <div className="flex items-center">
+                                                <div>
+                                                    <div className="text-sm leading-5 text-gray-900 dark:text-white">{ task.TypeTask }</div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
+                                        </td>
+                                    }
+
                                     <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                                         <div className="flex items-center">
                                             <div>
@@ -190,7 +226,6 @@ const Profile = () => {
 
 
                                     <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500 text-gray-900 dark:text-white text-sm leading-5">{ task.DateEnd }</td>
-
 
 
                                     <td className="px-6 py-4 whitespace-no-wrap border-b text-gray-900 dark:text-white border-gray-500 text-sm leading-5">
@@ -224,7 +259,7 @@ const Profile = () => {
                                             <button className="flex items-center justify-center  px-5 py-2 mx-2 border-blue-500 border text-blue-500 rounded transition duration-300 hover:bg-blue-700 hover:text-white focus:outline-none font-semibold"
                                                 variant="outlined"
                                                 color="neutral"
-                                                onClick={ () => handleClickReport(task.id) }
+                                                onClick={ () => handleClickReport(task.id, task.TypeTask) }
                                             >
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
@@ -246,30 +281,77 @@ const Profile = () => {
                                                             </div>
                                                             <div className="mb-4">
                                                                 <label className="block text-white text-sm font-bold mb-2" htmlFor="content">
-                                                                    content
+                                                                    Content
                                                                 </label>
-                                                                <input className="shadow appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline bg-gray-700 text-white" id="content" type="text" placeholder="content" name="content"
+                                                                <textarea
+                                                                    rows="12"
+                                                                    cols="12"
+                                                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-white bg-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                                    id="content"
+                                                                    placeholder="Enter content here..."
+                                                                    name="content"
                                                                     onChange={ (e) => setContent(e.target.value) }
-
-                                                                />
+                                                                >
+                                                                </textarea>
                                                             </div>
+
                                                             <div className="mb-4">
-                                                                <label className="block text-white text-sm font-bold mb-2" htmlFor="disease">
-                                                                    Disease
-                                                                </label>
-                                                                <div className="flex items-center space-x-4">
-                                                                    <select className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 text-white" id="disease" name="disease_id"
-                                                                        onChange={ (e) => setDisease(e.target.value) }
-                                                                    >
-                                                                        <option value="" disabled>Select disease</option>
-                                                                        { DiseaseList.map((disease) => (
-                                                                            <option value={ disease.id } >{ disease.name }</option>
 
-                                                                        )) }
-                                                                    </select>
-                                                                    <input type="file" className="shadow appearance-none border rounded py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 text-white" id="diseaseImage" name="image" accept="image/*"
+                                                                <div className="flex items-center justify-between space-x-4 w-full">
 
-                                                                        onChange={ (e) => setImage(e.target.files[0]) } />
+                                                                    { type === "Traitement" || type === "Surviance" ? (
+
+                                                                        <select
+                                                                            className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 text-white"
+                                                                            id="disease"
+                                                                            name="disease_id"
+                                                                            onChange={ (e) => setDisease(e.target.value) }
+                                                                        >
+                                                                            <option value="">Select disease</option>
+                                                                            { DiseaseList.map((disease) => (
+                                                                                <option key={ disease.id } value={ disease.id }>{ disease.name }</option>
+                                                                            )) }
+                                                                        </select>
+                                                                    ) : null }
+
+
+
+                                                                    { type === "Traitement" || type === "Irrigation" || type === "Fertigation" ? (
+
+                                                                        <select
+                                                                            className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 text-white"
+                                                                            id="disease"
+                                                                            name="product_id[]"
+                                                                            multiple
+                                                                            onChange={ handleProductChange }                                                                        >
+                                                                            <option value="">Select Product</option>
+                                                                            { Product.productList.map((product) => (
+                                                                                <option key={ product.id } value={ product.id }>{ product.name }</option>
+                                                                            )) }
+                                                                        </select>
+                                                                    ) : null }
+
+
+
+
+
+                                                                    <div className='w-full flex justify-end'>
+
+
+                                                                        <Button
+                                                                            component="label"
+                                                                            role={ undefined }
+                                                                            variant="contained"
+                                                                            name="image" accept="image/*"
+                                                                            tabIndex={ -1 }
+                                                                            startIcon={ <CloudUploadIcon /> }
+                                                                            onChange={ (e) => setImage(e.target.files[0]) }
+                                                                        >
+                                                                            Upload file
+                                                                            <VisuallyHiddenInput type="file" />
+                                                                        </Button>
+                                                                    </div>
+
                                                                 </div>
                                                             </div>
 
@@ -297,6 +379,13 @@ const Profile = () => {
 
                         </tbody>
                     </table>
+
+
+
+
+
+
+
                 </div>
             </div>
         </>

@@ -12,49 +12,63 @@ const ProductState = {
 export const fetchProduct = createAsyncThunk(
   "product/fetchProduct",
   async () => {
-    const response = await axios.get("http://localhost:8000/api/items");
-    return response.data.response;
+    const response = await axios.get("http://localhost/api/v1/products");
+    return response.data.data;
   }
 );
+const token = JSON.parse(localStorage.getItem('user'));
 
-export const addEmployee = createAsyncThunk(
-  "product/addEmployee",
+export const addProduct = createAsyncThunk(
+  "product/addProduct",
   async (data) => {
-    const response = await axios.post("http://localhost:8000/api/items", {
-      name: data.name,
-      position: data.position,
-    });
-    return response.data.response;
+    const response = await axios.post("http://localhost/api/v1/products", data.formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token.access_token}`,
+
+        }
+      });
+
+    return response.data.data;
   }
 );
 
-export const removeEmployee = createAsyncThunk(
-  "product/removeEmployee",
+export const removeProduct = createAsyncThunk(
+  "product/removeProduct",
   async (data) => {
     const response = await axios.delete(
-      `http://localhost:8000/api/items/${data}`
+      `http://localhost/api/v1/products/${data}`
     );
-    return response.data.response;
+    return response.data.data;
   }
 );
 
-export const modifiedEmployee = createAsyncThunk(
-  "product/modifiedEmployee",
-  async (data) => {
-    const response = await axios.put(
-      `http://localhost:8000/api/items/${data.id}`,
+
+
+export const modifiedProduct = createAsyncThunk(
+  "product/modifiedProduct",
+  async ({ formData, id }) => {
+    console.log('FormData sent:', id);
+    const response = await axios.post(
+      `http://localhost/api/v1/products/${id}`, formData,
       {
-        name: data.name,
-        position: data.position,
-      }
-    );
-    return response.data.response;
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token.access_token}`,
+
+        }
+      });
+
+
+    console.log();
+    return response.data.data;
   }
 );
 
-const employeeSlice = createSlice({
-  name: "employee",
-  initialState: employeeState,
+const ProductSlice = createSlice({
+  name: "Product",
+  initialState: ProductState,
   reducers: {
     changeStateTrue: (state) => {
       state.updateState = true;
@@ -68,15 +82,15 @@ const employeeSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(addEmployee.pending, (state) => {
+      .addCase(addProduct.pending, (state) => {
         state.loading = true;
       })
-      .addCase(addEmployee.fulfilled, (state, action) => {
+      .addCase(addProduct.fulfilled, (state, action) => {
         state.loading = false;
         state.productList.push(action.payload);
         state.response = "add";
       })
-      .addCase(addEmployee.rejected, (state, action) => {
+      .addCase(addProduct.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });
@@ -89,27 +103,31 @@ const employeeSlice = createSlice({
         state.error = action.error.message;
       });
 
-    builder.addCase(removeEmployee.fulfilled, (state, action) => {
-      state.productList = state.productList.filter(
-        (item) => item._id != action.payload
-      );
+    builder.addCase(removeProduct.fulfilled, (state, action) => {
+
+      const newProductList = state.productList.filter(item => item.id !== action.payload)
       state.response = "delete";
+      state.productList = newProductList
     });
 
-    builder.addCase(modifiedEmployee.fulfilled, (state, action) => {
-      const updateItem = action.payload;
-      console.log(updateItem);
-      const index = state.productList.findIndex(
-        (item) => item._id === updateItem._id
-      );
-      if (index !== -1) {
-        state.productList[index] = updateItem;
-      }
-      state.response = "update";
+    builder.addCase(modifiedProduct.fulfilled, (state, action) => {
+      state.loading = false;
+      const { id, name, quantity, type, image } = action.payload;
+      state.productList = state.productList.map((product) => {
+        if (product.id === id) {
+          return {
+            ...product,
+            id, name, quantity, type, image
+          };
+        }
+        return task;
+      });
+
+      state.response = "updated";
     });
   },
 });
 
-export default employeeSlice.reducer;
+export default ProductSlice.reducer;
 export const { changeStateTrue, changeStateFalse, clearResponse } =
-  employeeSlice.actions;
+  ProductSlice.actions;

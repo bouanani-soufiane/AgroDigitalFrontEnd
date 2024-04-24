@@ -89,6 +89,13 @@ export const Sidebar = ({ activeMenu, setActiveMenu }) => {
                   <MdOutlineCleaningServices className=" text-lg" />
                   Traitement
                 </Link>
+                <Link
+                  to="/reports"
+                  className=" hover:bg-[#EFF1FF] dark:hover:bg-[#343338] text-sm hover:font-bold hover:border-l-4 hover:border-[#181C1F] hover:text-black gap-3 px-8 py-3 items-center font-normal mt-2 flex tracking-tight text-white dark:text-gray-300"
+                >
+                  <MdOutlineCleaningServices className=" text-lg" />
+                  Reports
+                </Link>
 
               </div>
               {/* */}

@@ -141,6 +141,7 @@ const TaskSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
         state.response = "";
+        console.log(action.error.message);
       });
 
     builder

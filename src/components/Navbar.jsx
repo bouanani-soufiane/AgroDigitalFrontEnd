@@ -27,18 +27,19 @@ export const Navbar = ({ activeMenu, setActiveMenu }) => {
       document.documentElement.classList.remove("dark");
     }
   }, [theme]);
-
-
+  console.log('hi', user);
+  const userConnected = JSON.parse(localStorage.getItem('user'));
+  // console.log('ddd', userConnected.name);
   const dispatch = useDispatch();
   const handleLogout = () => {
     dispatch(logout());
-    // navigate("/login");
+    navigate("/login");
   };
-  // useEffect(() => {
-  //   if (!isLoggedIn) {
-  //     navigate("/login");
-  //   }
-  // }, [isLoggedIn, navigate]);
+  useEffect(() => {
+    if (!userConnected) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
 
   return (
@@ -46,11 +47,11 @@ export const Navbar = ({ activeMenu, setActiveMenu }) => {
       <div className="flex text-lg items-center dark:text-gray-300 md:gap-8 md:col-span-1 col-span-2 gap-4 ">
         <MdOutlineSegment
           className=" rotate-180 text-2xl cursor-pointer"
-          onClick={() => setActiveMenu(!activeMenu)}
+          onClick={ () => setActiveMenu(!activeMenu) }
         />
         <h2 className="font-bold text-lg ">Dashboard</h2>
       </div>
-      {/* */}
+      {/* */ }
       <div className="col-span-2">
         <input
           type="text"
@@ -58,31 +59,31 @@ export const Navbar = ({ activeMenu, setActiveMenu }) => {
           className="bg-[#F6F6FA] dark:bg-[#303235] p-2.5 w-full md:w-5/6 rounded-lg"
         />
       </div>
-      {/* */}
+      {/* */ }
       <div className=" md:col-span-1 col-span-4 md:mt-0 mt-5 gap-3 flex justify-center md:justify-end dark:text-gray-300 items-center text-xl">
-        {theme === "dark" ? (
+        { theme === "dark" ? (
           <GoSun
-            onClick={handleThemeSwitch}
+            onClick={ handleThemeSwitch }
             className="my-auto text-md cursor-pointer"
           />
         ) : (
           <GoMoon
-            onClick={handleThemeSwitch}
+            onClick={ handleThemeSwitch }
             className="my-auto text-md cursor-pointer"
           />
-        )}
+        ) }
         <GoBell className="my-auto text-md cursor-pointer" />
         <div className="flex text-base gap-1"
-          onClick={() => {
+          onClick={ () => {
             setIsOpen(!isOpen);
-          }}>
+          } }>
 
-          <p className="cursor-default mx-3 px-4 flex ">Hassan Jaraf
+          <p className="cursor-default mx-3 px-4 flex ">{ user.name }
             <IoIosArrowDown
               className="my-auto cursor-pointer"
             /> </p>
 
-          {isOpen && (
+          { isOpen && (
             <div className=" bg-[#333] flex flex-col absolute top-28 md:top-16 w-40 p-3 text-sm rounded-md">
               <Link
                 to="profile"
@@ -93,13 +94,13 @@ export const Navbar = ({ activeMenu, setActiveMenu }) => {
               </Link>
               <button
                 className="hover:bg-[#444] dark:hover:bg-[#444] flex items-center gap-2 text-white dark:text-gray-300 p-2"
-                onClick={handleLogout}
+                onClick={ handleLogout }
               >
                 <MdOutlineLogout className=" text-base" />
                 Logout
               </button>
             </div>
-          )}
+          ) }
         </div>
       </div>
     </div>

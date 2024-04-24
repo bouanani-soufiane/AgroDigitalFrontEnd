@@ -21,15 +21,20 @@ const Employee = () => {
     const [Status, setStatus] = useState("Pending");
     const [employee_id, setEmployee_id] = useState("");
     const [TypeTask, setTypeTask] = useState("");
+    const [role, setRole] = useState("");
 
     useEffect(() => {
         dispatch(fetchUser())
 
 
     }, []);
-    const handleAssignTaskClick = (userId) => {
+    const handleAssignTaskClick = (userId, role) => {
         setOpen(true);
         setEmployee_id(userId);
+        setRole(role);
+
+
+        console.log(role);
     }
 
 
@@ -70,7 +75,7 @@ const Employee = () => {
 
 
                 <div className="align-middle inline-block min-w-full shadow overflow-hidden dark:bg-[#343338] shadow-dashboard px-8 pt-3  rounded-lg pb-12">
-                    <h1 className='font-bold text-2xl mb-8 mt-2 text-white'>All Employees </h1>
+                    <h1 className='font-bold text-2xl mb-8 mt-2 dark:text-white'>All Employees </h1>
 
                     <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
 
@@ -96,7 +101,7 @@ const Employee = () => {
                                                     <button className="flex items-center justify-center  px-5 py-2 mx-2 border-green-500 border text-green-500 rounded transition duration-300 hover:bg-green-700 hover:text-white focus:outline-none font-semibold"
                                                         variant="outlined"
                                                         color="neutral"
-                                                        onClick={ () => handleAssignTaskClick(user.id) }>
+                                                        onClick={ () => handleAssignTaskClick(user.id, user.role) }>
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-5 h-5">
                                                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                         </svg>
@@ -139,22 +144,36 @@ const Employee = () => {
                                                                             setDateEnd(e.target.value);
                                                                         } } />
                                                                     </div>
-                                                                    <div className="mb-4">
-                                                                        <label className="block text-white text-sm font-bold mb-2" htmlFor="type">
-                                                                            Type
-                                                                        </label>
-                                                                        <select className="shadow appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline bg-gray-700 text-white" id="type" name="TypeTask" onChange={ (e) => {
-                                                                            setTypeTask(e.target.value);
-                                                                        } } >
-                                                                            <option value="" disabled>Select Type</option>
-                                                                            <option value="Traitement">Traitement</option>
-                                                                            <option value="Surviance">Surviance</option>
-                                                                            <option value="Irrigation">Irrigation</option>
-                                                                            <option value="Fertigation">Fertigation</option>
-                                                                        </select>
-                                                                        <input type="hidden" name="Status" value="Pending" />
-                                                                        <input type="hidden" name="employee_id" value={ employee_id } />
-                                                                    </div>
+                                                                    {
+                                                                        role !== 'Magazinier' &&
+
+                                                                        <div className="mb-4">
+                                                                            <label className="block text-white text-sm font-bold mb-2" htmlFor="type">
+                                                                                Type
+                                                                            </label>
+                                                                            <select className="shadow appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline bg-gray-700 text-white" id="type" name="TypeTask" onChange={ (e) => {
+                                                                                setTypeTask(e.target.value);
+                                                                            } } >
+                                                                                <option value="" disabled>Select Type</option>
+
+
+                                                                                <option value="Traitement">Traitement</option>
+                                                                                <option value="Surviance">Surviance</option>
+                                                                                <option value="Irrigation">Irrigation</option>
+                                                                                <option value="Fertigation">Fertigation</option>
+
+
+
+
+                                                                            </select>
+
+                                                                        </div>
+
+                                                                    }
+
+
+                                                                    <input type="hidden" name="Status" value="Pending" />
+                                                                    <input type="hidden" name="employee_id" value={ employee_id } />
 
                                                                     <div className="flex items-center justify-between">
                                                                         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onClick={ (e) => handleAddTask(e) }

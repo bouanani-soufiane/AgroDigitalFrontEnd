@@ -14,8 +14,7 @@ export const fetchReport = createAsyncThunk(
   "Report/fetchReport",
   async () => {
     const response = await axios.get("http://localhost/api/v1/reports");
-    // console.log(response.data.data);
-    return response.data.data;
+    return response.data;
   }
 );
 

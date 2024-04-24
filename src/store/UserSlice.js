@@ -17,7 +17,6 @@ export const fetchUser = createAsyncThunk(
     'user/fetchUser',
     async () => {
         const response = await axios.get(`http://localhost/api/v1/users`);
-        // console.log(response.data.data);
         return response.data.data;
     }
 );
@@ -26,7 +25,6 @@ export const LoginUser = createAsyncThunk(
     'user/loginUser',
     async (userCredential) => {
         const request = await axios.post(`http://localhost/api/v1/login`, userCredential);
-        // console.log(request);
         const response = await request.data;
         console.log(response);
         localStorage.setItem('user', JSON.stringify(response));
@@ -38,9 +36,7 @@ export const RegisterUser = createAsyncThunk(
     'user/RegisterUser',
     async (userCredential) => {
         const request = await axios.post(`http://localhost/api/v1/register`, userCredential);
-        console.log(request);
         const response = await request.data.data;
-        console.log(response);
         localStorage.setItem('user', JSON.stringify(response));
         return response;
     }
@@ -57,7 +53,6 @@ const UserSlice = createSlice({
             state.isLoggedIn = false;
 
             const user = JSON.parse(localStorage.getItem('user'));
-            console.log(user.access_token);
 
             axios.post('http://localhost/api/v1/logout', {}, {
                 headers: { 'Authorization': `Bearer ${user.access_token}` }
@@ -79,14 +74,12 @@ const UserSlice = createSlice({
                 state.isLoggedIn = true,
                     state.isLoading = false,
                     state.user = action.payload,
-                    console.log(state.token),
-
-                    state.error = null
+                    console.log("user",action.payload);
+                state.error = null
             })
             .addCase(LoginUser.rejected, (state, action) => {
                 state.isLoading = false,
-                    state.user = null,
-                    console.log(action.error.message);
+                    state.user = null;
                 if (action.error.message == 'Request failed with status code 401') {
                     state.error = 'Access Denied! Invalid Credentials';
                 } else {
@@ -117,7 +110,6 @@ const UserSlice = createSlice({
         builder
             .addCase(fetchUser.fulfilled, (state, action) => {
                 state.UserList = action.payload
-                // console.log(state.UserList);
             })
             .addCase(fetchUser.rejected, (state, action) => {
                 state.error = action.error.message;

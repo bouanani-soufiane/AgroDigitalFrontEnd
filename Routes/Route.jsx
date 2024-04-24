@@ -10,6 +10,7 @@ import Maladie from "../src/pages/Maladies/Maladies";
 import Traitement from "../src/pages/Traitement/Traitement";
 import Profile from "../src/pages/Profile/Profile";
 import Register from "../src/pages/Auth/Register";
+import Report from "../src/pages/Report/Report";
 
 const Router = createBrowserRouter([
     {
@@ -54,6 +55,10 @@ const Router = createBrowserRouter([
             {
                 path: '/profile',
                 element: <Profile />
+            },
+            {
+                path: '/reports',
+                element: <Report />
             }
         ]
     }
