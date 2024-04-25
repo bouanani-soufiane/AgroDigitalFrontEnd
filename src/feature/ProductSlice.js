@@ -21,6 +21,8 @@ const token = JSON.parse(localStorage.getItem('user'));
 export const addProduct = createAsyncThunk(
   "product/addProduct",
   async (data) => {
+
+    console.log(data);
     const response = await axios.post("http://localhost/api/v1/products", data.formData,
       {
         headers: {

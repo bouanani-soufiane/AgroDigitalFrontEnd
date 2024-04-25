@@ -92,13 +92,13 @@ const Profile = () => {
         formData.append("task_id", task_id);
         formData.append("disease_id", disease);
         formData.append("image", image);
-        formData.append("product_id", product);
+        product.forEach(p => {
+            formData.append("product_id[]", p);
+        });
 
-
-
+        // console.log(formData);
         dispatch(addReport({ formData: formData }))
-            .then(toast.success('report added'))
-            ;
+            .then(toast.success('report added'));
         setOpen(false);
 
 
