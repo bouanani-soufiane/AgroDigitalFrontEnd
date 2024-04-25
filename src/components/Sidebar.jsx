@@ -8,19 +8,18 @@ import { RiStockFill } from "react-icons/ri";
 import { FaHome } from "react-icons/fa";
 import { MdOutlineCleaningServices } from "react-icons/md";
 
-
-
+import { CgProfile } from "react-icons/cg";
 
 
 export const Sidebar = ({ activeMenu, setActiveMenu }) => {
   return (
     <div className=" bg-green-900 dark:bg-[#181C1F]  dark:border-r-2 dark:border-[#35383B] h-screen md:overflow-hidden overflow-auto md:hover:overflow-auto pb-8">
-      {activeMenu && (
+      { activeMenu && (
         <>
           <div>
             <button
               type="button"
-              onClick={() => setActiveMenu(!activeMenu)}
+              onClick={ () => setActiveMenu(!activeMenu) }
               className=" text-xl rounded-full text-white hover:bg-light-gray m-3 block md:hidden"
             >
               <MdOutlineCancel />
@@ -34,7 +33,7 @@ export const Sidebar = ({ activeMenu, setActiveMenu }) => {
           </div>
 
           <div>
-            {/* */}
+            {/* */ }
             <div className=" flex flex-col justify-between">
               <div>
                 <p className="text-gray-300 text-sm font-semibold tracking-wide px-4 mt-10">
@@ -82,13 +81,7 @@ export const Sidebar = ({ activeMenu, setActiveMenu }) => {
                   <FaDisease className=" text-lg" />
                   Maladie
                 </Link>
-                <Link
-                  to="/traitement"
-                  className=" hover:bg-[#EFF1FF] dark:hover:bg-[#343338] text-sm hover:font-bold hover:border-l-4 hover:border-[#181C1F] hover:text-black gap-3 px-8 py-3 items-center font-normal mt-2 flex tracking-tight text-white dark:text-gray-300"
-                >
-                  <MdOutlineCleaningServices className=" text-lg" />
-                  Traitement
-                </Link>
+
                 <Link
                   to="/reports"
                   className=" hover:bg-[#EFF1FF] dark:hover:bg-[#343338] text-sm hover:font-bold hover:border-l-4 hover:border-[#181C1F] hover:text-black gap-3 px-8 py-3 items-center font-normal mt-2 flex tracking-tight text-white dark:text-gray-300"
@@ -96,9 +89,16 @@ export const Sidebar = ({ activeMenu, setActiveMenu }) => {
                   <MdOutlineCleaningServices className=" text-lg" />
                   Reports
                 </Link>
+                <Link
+                  to="/profile"
+                  className=" hover:bg-[#EFF1FF] dark:hover:bg-[#343338] text-sm hover:font-bold hover:border-l-4 hover:border-[#181C1F] hover:text-black gap-3 px-8 py-3 items-center font-normal mt-2 flex tracking-tight text-white dark:text-gray-300"
+                >
+                  <CgProfile className=" text-lg" />
+                  Profile
+                </Link>
 
               </div>
-              {/* */}
+              {/* */ }
               <div>
                 <p className="text-gray-300  text-sm font-semibold tracking-wide px-4 mt-4">
                   Help
@@ -115,7 +115,7 @@ export const Sidebar = ({ activeMenu, setActiveMenu }) => {
             </div>
           </div>
         </>
-      )}
+      ) }
     </div>
   );
 };

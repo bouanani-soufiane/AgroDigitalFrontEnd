@@ -3,13 +3,14 @@ import { Navigate } from 'react-router-dom'
 
 
 
-const ProtectedRoute = ({ component: Component, role }) => {
+const ProtectedRoute = ({ Component, roles }) => {
   const userConnected = JSON.parse(localStorage.getItem('user'));
 
-  if (userConnected && userConnected.role === role) {
-    return <Component />;
-  }
+  if (userConnected && userConnected.role === roles) {
 
+    return <Component />;
+
+  }
   return <Navigate to="/login" />;
 };
 

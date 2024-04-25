@@ -7,7 +7,6 @@ import Employee from "../src/pages/Employees/Employee";
 import Task from "../src/pages/Tasks/Task";
 import Product from "../src/pages/Products/Products";
 import Maladie from "../src/pages/Maladies/Maladies";
-import Traitement from "../src/pages/Traitement/Traitement";
 import Profile from "../src/pages/Profile/Profile";
 import Register from "../src/pages/Auth/Register";
 import Report from "../src/pages/Report/Report";
@@ -32,15 +31,17 @@ const Router = createBrowserRouter([
             },
             {
                 path: '/program',
-                element: <ProtectedRoute component={ Program } roles={ ['Magazinier'] } />
+                element: <ProtectedRoute component={ Program } roles={ ['Gerant'] } />
             },
             {
                 path: '/employees',
-                element: <Employee />
+                element: <ProtectedRoute component={ Employee } roles={ ['Gerant'] } />
+
             },
             {
                 path: '/tasks',
-                element: <Task />
+                element: <ProtectedRoute component={ Task } roles={ ['Gerant'] } />
+
             },
             {
                 path: '/products',
@@ -51,16 +52,13 @@ const Router = createBrowserRouter([
                 element: <Maladie />
             },
             {
-                path: '/traitement',
-                element: <Traitement />
-            },
-            {
                 path: '/profile',
                 element: <Profile />
             },
             {
                 path: '/reports',
-                element: <Report />
+                element: <ProtectedRoute component={ Report } roles={ ['Gerant'] } />
+
             }
         ]
     }
