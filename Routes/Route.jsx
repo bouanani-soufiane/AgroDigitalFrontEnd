@@ -12,6 +12,8 @@ import Profile from "../src/pages/Profile/Profile";
 import Register from "../src/pages/Auth/Register";
 import Report from "../src/pages/Report/Report";
 
+import ProtectedRoute from '../src/utilities/PrivateRoutes';
+
 const Router = createBrowserRouter([
     {
         path: '/login',
@@ -30,7 +32,7 @@ const Router = createBrowserRouter([
             },
             {
                 path: '/program',
-                element: <Program />
+                element: <ProtectedRoute component={ Program } roles={ ['Magazinier'] } />
             },
             {
                 path: '/employees',
@@ -42,7 +44,7 @@ const Router = createBrowserRouter([
             },
             {
                 path: '/products',
-                element: <Product />
+                element: <ProtectedRoute component={ Product } roles={ ['Magazinier'] } />
             },
             {
                 path: '/maladies',

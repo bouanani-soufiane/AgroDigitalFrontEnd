@@ -25,6 +25,9 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 const Profile = () => {
+    const userConnected = JSON.parse(localStorage.getItem('user'));
+// console.log(userConnected);
+
     const dispatch = useDispatch();
     const Task = useSelector(state => state.Task);
     const User = useSelector(state => state.user);
@@ -143,12 +146,12 @@ const Profile = () => {
                                 <div class="pb-6 rounded-lg">
                                     <label for="name" class=" rounded-lg font-semibold text-gray-100 block pb-1">Name</label>
                                     <div class="flex  rounded-lg bg-green-950 dark:bg-slate-900">
-                                        <input disabled id="username" class="border-1  rounded-lg rounded-r px-4 py-2 w-full" type="text" value="Jane Name" />
+                                        <input disabled id="username" class="border-1  rounded-lg rounded-r px-4 py-2 w-full" type="text" value={ userConnected ? userConnected.name : "" } />
                                     </div>
                                 </div>
                                 <div class="pb-4">
-                                    <label for="about" class="font-semibold  text-gray-100 block pb-1">Email</label>
-                                    <input disabled id="email" class="border-1   rounded-lg rounded-r px-4 py-2 w-full  dark:bg-slate-600" type="email" value="example@example.com" />
+                                    <label for="about" class="font-semibold  text-gray-100 block pb-1">Position</label>
+                                    <input disabled id="email" class="border-1   rounded-lg rounded-r px-4 py-2 w-full  dark:bg-slate-600" type="email" value={ userConnected ? userConnected.role : "" } />
                                 </div>
                             </div>
                         </div>

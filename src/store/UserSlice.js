@@ -10,9 +10,7 @@ const initialState = {
     error: null,
     role: null,
 };
-// const resetState = (state) => {
-//   Object.assign(state, initialState);
-// };
+
 export const fetchUser = createAsyncThunk(
     'user/fetchUser',
     async () => {
@@ -26,7 +24,7 @@ export const LoginUser = createAsyncThunk(
     async (userCredential) => {
         const request = await axios.post(`http://localhost/api/v1/login`, userCredential);
         const response = await request.data;
-        console.log(response);
+        console.log("login",response);
         localStorage.setItem('user', JSON.stringify(response));
         return response;
     }

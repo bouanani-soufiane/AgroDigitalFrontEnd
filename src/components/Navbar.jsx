@@ -78,7 +78,7 @@ export const Navbar = ({ activeMenu, setActiveMenu }) => {
             setIsOpen(!isOpen);
           } }>
 
-          <p className="cursor-default mx-3 px-4 flex ">{ user.name }
+          <p className="cursor-default mx-3 px-4 flex ">{ userConnected ? userConnected.name : "" }
             <IoIosArrowDown
               className="my-auto cursor-pointer"
             /> </p>
