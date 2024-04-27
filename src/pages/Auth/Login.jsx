@@ -50,7 +50,7 @@ const Login = () => {
                             Welcom back! Please enter your details
                         </span>
                         {error &&
-                            <div class="hover:red-yellow-500 w-full mb-2 select-none rounded-l-lg border-l-4 border-red-400 bg-red-100 p-4 font-medium"> Invalide Credential!</div>
+                            <div class="hover:red-yellow-500 w-full mb-2 select-none rounded-l-lg border-l-4 border-red-400 bg-red-100 p-4 font-medium">{error }</div>
                         }
                         <div className="py-4">
                             <span className="mb-2 text-md">Email</span>

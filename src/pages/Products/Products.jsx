@@ -12,6 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { Statistics } from '../../components/statistics';
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
     clipPath: 'inset(50%)',
@@ -44,11 +45,9 @@ const Product = () => {
         formData.append("type", type);
         formData.append("image", image);
 
-
         dispatch(addProduct({ formData: formData }))
             .then(toast.success('product added'));
         setOpen(false);
-
 
     }
 
@@ -97,12 +96,7 @@ const Product = () => {
 
     return (
         <div className="">
-            <div className="grid gap-4 md:gap-8 grid-cols-1 md:grid-cols-4">
-                <Card title="Total get free campaigns" number="17" color="#83E8E1" />
-                <Card title="Needs approval" number="4" color="#83E8E1" />
-                <Card title="Disputes" number="5" color="#FFBA79" />
-                <Card title="Messages" number="8" color="#FFB2D3" />
-            </div>
+            <Statistics />
             <ToastContainer />
 
             <div className='pt-12 grid gap-4 md:gap-8 grid-cols-1 rounded-lg '>
@@ -122,9 +116,9 @@ const Product = () => {
                                 <span>Add Product</span>
                             </button>
                             <Modal open={ open } onClose={ () => setOpen(false) } className='container mx-auto bg'>
-                                <ModalDialog className=' dark:bg-[#343338]'>
+                                <ModalDialog className='w-[900px] dark:bg-[#343338]'>
                                     <h1 className='text-center font-bold text-4xl text-white'>Create new Program</h1>
-                                    <div className="max-w-md mx-auto">
+                                    <div className="w-full mx-auto">
                                         <form className="dark:bg-[#343338] shadow-md rounded px-8 pt-6 pb-8 mb-4" encType="multipart/form-data">
                                             <div className="mb-4">
                                                 <label className="block text-white text-sm font-bold mb-2" htmlFor="name">
@@ -252,19 +246,16 @@ const Product = () => {
                                                     className=" flex items-center justify-center w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-green-500 rounded-lg shrink-0 sm:w-auto gap-x-2 hover:bg-green-600 dark:hover:bg-green-500 dark:bg-green-900"
                                                     variant="outlined"
                                                     color="neutral"
-                                                    onClick={ () => openUpdateDialog(product) }
-                                                >
+                                                    onClick={ () => openUpdateDialog(product) }>
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                                     </svg>
-
                                                 </button>
                                                 <Modal open={ openUpdateModal } onClose={ () => setOpenUpdateModal(false) }>
-                                                    <ModalDialog className='dark:bg-[#343338]'>
+                                                    <ModalDialog className='w-[900px] dark:bg-[#343338]'>
                                                         <h1 className='text-center font-bold text-4xl text-white'>Update Product</h1>
-                                                        <div className="max-w-md mx-auto">
+                                                        <div className="w-full mx-auto">
                                                             <form className="dark:bg-[#343338] shadow-md rounded px-8 pt-6 pb-8 mb-4">
-                                                                {/* Name input */ }
                                                                 <div className="mb-4">
                                                                     <label className="block text-white text-sm font-bold mb-2" htmlFor="name">
                                                                         Name
@@ -278,7 +269,6 @@ const Product = () => {
                                                                         onChange={ (e) => setName(e.target.value) }
                                                                     />
                                                                 </div>
-                                                                {/* Quantity input */ }
                                                                 <div className="mb-4">
                                                                     <label className="block text-white text-sm font-bold mb-2" htmlFor="quantity">
                                                                         Quantity

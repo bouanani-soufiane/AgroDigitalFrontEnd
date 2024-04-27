@@ -45,15 +45,16 @@ const Router = createBrowserRouter([
             },
             {
                 path: '/products',
-                element: <ProtectedRoute component={ Product } roles={ ['Magazinier'] } />
+                element: <ProtectedRoute component={ Product } roles={ ['Magazinier', 'Gerant'] } />
             },
             {
                 path: '/maladies',
-                element: <Maladie />
+                element: <ProtectedRoute component={ Maladie } roles={ ['Technician', 'Gerant'] } />
+
             },
             {
                 path: '/profile',
-                element: <Profile />
+                element: <ProtectedRoute component={ Profile } roles={ ['Technician', 'Magazinier'] } />
             },
             {
                 path: '/reports',

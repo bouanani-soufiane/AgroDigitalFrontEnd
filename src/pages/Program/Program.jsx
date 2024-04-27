@@ -8,15 +8,15 @@ import { useEffect, useState } from "react";
 import { fetchProgram, addProgram, finishProgram, deleteProgram } from '../../feature/ProgramSlice';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { NoData } from '../../components/NoData';
 
 import { useDispatch, useSelector } from "react-redux";
 
 import Add from '@mui/icons-material/Add';
-import { Card } from "../../components/Card";
+import { Statistics } from "../../components/statistics";
 import TextField from '@mui/material/TextField';
 
 const Program = () => {
-    const [editMode, setEditMode] = useState(false);
     const dispatch = useDispatch();
     const { loading, ProgramList, error, response } = useSelector(
         (state) => state.Program
@@ -26,21 +26,12 @@ const Program = () => {
 
 
     const handleChange = (programId, stageId, attribute, e) => {
-        // console.log('prog', programId);
-        // console.log('stage', stageId);
-        // console.log('attr', attribute);
-        // console.log('value', e);
 
         const updatedValues = [...attValues];
         updatedValues.push({ programId, stageId, attribute, value: e });
 
         setAttValues(updatedValues);
     };
-
-
-
-
-
 
     useEffect(() => {
         dispatch(fetchProgram());
@@ -77,24 +68,28 @@ const Program = () => {
 
     const [cultur_name, setCultur_name] = useState("");
     const [program_name, setProgram_name] = useState("");
-    const [stage_name, setStage_name] = useState([]);
+
     const [attribute_name, setAttribute_name] = useState([]);
     const [attribute_value, setAttribute_value] = useState([]);
 
     const handleClick = (e) => {
+
+        const stageNames = stages.map(stage => stage.name);
+        const stageDurations = stages.map(stage => stage.duration);
+        console.log(stageDurations);
         e.preventDefault();
         dispatch(
             addProgram({
                 cultur_name: cultur_name,
                 program_name: program_name,
-                stage_name: stage_name,
+                stage_name: stageNames,
+                stage_duration: stageDurations,
                 attribute_name: attribute_name,
                 attribute_value: attribute_value,
             })
         );
         setCultur_name("");
         setProgram_name("");
-        setStage_name([]);
         setAttribute_name([])
         setAttribute_value([]);
         setOpen(false);
@@ -111,17 +106,24 @@ const Program = () => {
         console.log('dtdtd', attValues);
 
     };
+    const [stages, setStages] = useState([{ name: "", duration: "" }]);
 
-    const [stageFrom, setFormStage] = useState([{ name: "" }]);
     const [attributeFrom, setFormAttribute] = useState([{ name: "" }]);
 
     const handleAddStage = () => {
-        setFormStage([...stageFrom, { name: "" }]);
+        setStages([...stages, { name: "", duration: "" }]);
     }
-    const handleRemoveStage = (i) => {
-        const newStageFrom = [...stageFrom];
-        newStageFrom.splice(i, 1);
-        setFormStage(newStageFrom);
+    const handleRemoveStage = index => {
+        setStages(stages.filter((_, i) => i !== index));
+    }
+    const handleStageChange = (index, field, value) => {
+        const updatedStages = stages.map((stage, i) => {
+            if (i === index) {
+                return { ...stage, [field]: value };
+            }
+            return stage;
+        });
+        setStages(updatedStages);
     }
     const handleAddAttribute = () => {
         setFormAttribute([...attributeFrom, { name: "" }]);
@@ -139,12 +141,7 @@ const Program = () => {
 
     return (
         <div className="">
-            <div className="grid gap-4 md:gap-8 grid-cols-1 md:grid-cols-4">
-                <Card title="Total get free campaigns" number="17" color="#83E8E1" />
-                <Card title="Needs approval" number="4" color="#83E8E1" />
-                <Card title="Disputes" number="5" color="#FFBA79" />
-                <Card title="Messages" number="8" color="#FFB2D3" />
-            </div>
+            <Statistics />
             <ToastContainer />
 
             <div className='pt-12 grid gap-4 md:gap-8 grid-cols-1'>
@@ -158,15 +155,7 @@ const Program = () => {
                             </div>
 
                             <div className="flex items-center mt-4 gap-x-3">
-                                <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-lg gap-x-2 sm:w-auto dark:hover:bg-gray-800 dark:bg-gray-900 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-700">
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <g clipPath="url(#clip0_3098_154395)">
-                                            <path d="M13.3333 13.3332L9.99997 9.9999M9.99997 9.9999L6.66663 13.3332M9.99997 9.9999V17.4999M16.9916 15.3249C17.8044 14.8818 18.4465 14.1806 18.8165 13.3321C19.1866 12.4835 19.2635 11.5359 19.0351 10.6388C18.8068 9.7417 18.2862 8.94616 17.5555 8.37778C16.8248 7.80939 15.9257 7.50052 15 7.4999H13.95C13.6977 6.52427 13.2276 5.61852 12.5749 4.85073C11.9222 4.08295 11.104 3.47311 10.1817 3.06708C9.25943 2.66104 8.25709 2.46937 7.25006 2.50647C6.24304 2.54358 5.25752 2.80849 4.36761 3.28129C3.47771 3.7541 2.70656 4.42249 2.11215 5.23622C1.51774 6.04996 1.11554 6.98785 0.935783 7.9794C0.756025 8.97095 0.803388 9.99035 1.07431 10.961C1.34523 11.9316 1.83267 12.8281 2.49997 13.5832" stroke="currentColor" strokeWidth="1.67" strokeLinecap="round" strokeLinejoin="round" />
-                                        </g>
 
-                                    </svg>
-                                    <span>Import</span>
-                                </button>
                                 <React.Fragment>
                                     <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-blue-500 rounded-lg shrink-0 sm:w-auto gap-x-2 hover:bg-blue-600 dark:hover:bg-blue-500 dark:bg-blue-900"
                                         variant="outlined"
@@ -209,41 +198,43 @@ const Program = () => {
                                                 <div className='gap-12 mx-auto flex sm:flex-nowrap flex-wrap'>
                                                     <div className="lg:w-100 md:w-1/2 sm:w-1/2 my-3">
                                                         <h1 className='font-bold'>Stages</h1>
-                                                        <div className="lg:w-100 md:w-1/2 sm:w-1/2 my-3">
-                                                            { stageFrom.map((stage, i) => (
-                                                                <div key={ i }>
-                                                                    <TextField
-                                                                        variant="standard"
-                                                                        label="Stage"
-                                                                        className="w-full rounded-md border border-gray-300 dark:border-gray-700"
-                                                                        type="text"
-                                                                        name="stage_name[]"
-                                                                        value={ stage.name }
-                                                                        onChange={ (e) => {
-                                                                            const updatedStages = [...stageFrom];
-                                                                            updatedStages[i].name = e.target.value;
-                                                                            setFormStage(updatedStages);
-                                                                            const stageNames = updatedStages.map((stage) => stage.name);
-                                                                            setStage_name(stageNames);
-                                                                        } }
-                                                                    />
-                                                                    <IoIosRemoveCircleOutline className="my-3" onClick={ () => handleRemoveStage(i) } />
-                                                                </div>
-                                                            )) }
-                                                        </div>
+                                                        { stages.map((stage, i) => (
+                                                            <div key={ i } className='flex gap-10'>
+                                                                <TextField
+                                                                    variant="standard"
+                                                                    label="Stage Name"
+                                                                    className="w-full rounded-md border border-gray-300 dark:border-gray-700"
+                                                                    value={ stage.name }
+                                                                    onChange={ (e) => handleStageChange(i, 'name', e.target.value) }
+                                                                />
+                                                                <TextField
+                                                                    variant="standard"
+                                                                    label="Duration (days)"
+                                                                    className="w-full rounded-md border border-gray-300 dark:border-gray-700"
+                                                                    type="number"
+                                                                    value={ stage.duration }
+                                                                    onChange={ (e) => handleStageChange(i, 'duration', e.target.value) }
+                                                                />
+                                                                <IoIosRemoveCircleOutline
+                                                                    className="my-3 text-4xl text-red-600 cursor-pointer"
+                                                                    onClick={ () => handleRemoveStage(i) }
+                                                                />
+                                                            </div>
+                                                        )) }
                                                         <div className="mt-3">
-                                                            <IoIosAddCircleOutline onClick={ handleAddStage } />
+                                                            <IoIosAddCircleOutline className="cursor-pointer" onClick={ handleAddStage } />
                                                         </div>
                                                     </div>
+
                                                     <div className="lg:w-100 md:w-1/2 sm:w-1/2 my-3">
                                                         <h1 className='font-bold'>Attributes</h1>
                                                         <div className="lg:w-100 md:w-1/2 sm:w-1/2 my-3">
                                                             { attributeFrom.map((attribute, i) => (
-                                                                <div key={ i }>
+                                                                <div key={ i } className='flex justify'>
                                                                     <TextField
                                                                         variant="standard"
                                                                         label="Attribute"
-                                                                        className="w-full rounded-md border border-gray-300 dark:border-gray-700"
+                                                                        className="w-full rounded-md border border-gray-300 dark:border-gray-700 "
                                                                         type="text"
                                                                         name="attribute_name[]"
                                                                         value={ attribute.name }
@@ -255,7 +246,7 @@ const Program = () => {
                                                                             setAttribute_name(attributeNames);
                                                                         } }
                                                                     />
-                                                                    <IoIosRemoveCircleOutline className="my-3" onClick={ () => handleRemoveAttribute(i) } />
+                                                                    <IoIosRemoveCircleOutline className=" my-3 text-lg text-red-600 w" onClick={ () => handleRemoveAttribute(i) } />
                                                                 </div>
                                                             )) }
                                                         </div>
@@ -275,11 +266,16 @@ const Program = () => {
                                 </React.Fragment>
                             </div>
                         </div>
+                        <div className='flex'>
+                            {
+                                ProgramList?.length <= 0 && (<NoData name="Program" />)
+                            }
+                        </div>
                         <Tabs variant='soft-rounded' colorScheme='green'>
                             <TabList>
                                 { ProgramList.map((program, index) => (
                                     <Tab
-                                        className={ `font-semibold py-2 px-4 rounded-full mr-4 ${index % 2 === 0 ? 'bg-green-200' : 'bg-red-100'
+                                        className={ `font-semibold py-2 px-4 rounded-full mr-4 ${index % 2 === 0 ? 'bg-gray-50' : 'bg-gray-400'
                                             }` }
                                     >
                                         { program.program_name }
@@ -312,7 +308,7 @@ const Program = () => {
                                                             <tr key={ index } className="text-gray-700 dark:bg-gray-700 dark:text-gray-100 bg-green-100 dark:hover:text-gray-200 dark:hover:bg-gray-600">
                                                                 <td className="px-4 py-3">{ stageName }</td>
                                                                 <td className="px-4 py-3">
-                                                                    <input type="number" name="" className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-700" defaultValue={ 15 }
+                                                                    <input type="number" name="" className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-green-100 dark:bg-gray-700" defaultValue={ 15 }
                                                                     />
                                                                 </td>
                                                                 { program.stage
@@ -328,7 +324,7 @@ const Program = () => {
                                                                             <td key={ attrIndex } className="px-4 py-3">
                                                                                 <input
                                                                                     type="number"
-                                                                                    className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-700"
+                                                                                    className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-green-100 dark:bg-gray-700"
                                                                                     defaultValue={ stage.pivot.attribute_value }
                                                                                     onChange={ (e) => handleChange(programId + 1, stageId, attribute, e.target.value) }
                                                                                 />
@@ -354,7 +350,7 @@ const Program = () => {
                                             data-ripple-light="true"
                                             onClick={ () => handleDeleteProgram(program.id) }
                                         >
-                                            delete program  { program.id }
+                                            delete program
                                         </button>
 
 

@@ -4,10 +4,11 @@ import ModalDialog from '@mui/joy/ModalDialog';
 import { fetchUser } from '../../store/UserSlice';
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { Card } from "../../components/Card";
+import { Statistics } from "../../components/statistics";
 import { addTask } from "../../feature/TaskSlice";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { NoData } from '../../components/NoData';
 
 const Employee = () => {
     const [open, setOpen] = useState(false);
@@ -23,6 +24,8 @@ const Employee = () => {
     const [TypeTask, setTypeTask] = useState("");
     const [role, setRole] = useState("");
 
+    const [errors, setErrors] = useState({});
+
     useEffect(() => {
         dispatch(fetchUser())
 
@@ -36,6 +39,37 @@ const Employee = () => {
 
         console.log(role);
     }
+    const formatDate = (date) => {
+        let year = date.getFullYear();
+        let month = (`0${date.getMonth() + 1}`).slice(-2);
+        let day = (`0${date.getDate()}`).slice(-2);
+        let hours = (`0${date.getHours()}`).slice(-2);
+        let minutes = (`0${date.getMinutes()}`).slice(-2);
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+    };
+
+    const today = new Date();
+    const minDate = formatDate(today);
+
+
+    const validate = () => {
+        let tempErrors = {};
+        let now = new Date();
+        tempErrors.name = name ? "" : "Name is required";
+        if (!Description) tempErrors.Description = "Description is required";
+
+        let startDate = new Date(DateStart);
+        let endDate = new Date(DateEnd);
+
+        if (!DateStart || startDate < now) tempErrors.DateStart = "DateStart is invalid";
+
+        if (!DateEnd || endDate < now) tempErrors.DateEnd = "DateEnd is invalid";
+
+        if (!TypeTask) tempErrors.TypeTask = "TypeTask is required";
+
+        setErrors(tempErrors);
+        return Object.values(tempErrors).every(x => x === "");
+    }
 
 
     const handleAddTask = (e) => {
@@ -43,6 +77,7 @@ const Employee = () => {
 
         // console.log(name, ' | ', Description, ' | ', DateStart, ' | ', DateEnd, ' | ', Status, ' | ', TypeTask, ' | ', employee_id);
         e.preventDefault();
+        if (!validate()) return;
         dispatch(addTask(
 
             {
@@ -64,19 +99,18 @@ const Employee = () => {
 
     return (
         <div className="">
-            <div className="grid gap-4 md:gap-8 grid-cols-1 md:grid-cols-4">
-                <Card title="Total get free campaigns" number="17" color="#83E8E1" />
-                <Card title="Needs approval" number="4" color="#83E8E1" />
-                <Card title="Disputes" number="5" color="#FFBA79" />
-                <Card title="Messages" number="8" color="#FFB2D3" />
-            </div>
+
             <ToastContainer />
             <div className='pt-12 grid gap-4 md:gap-8 grid-cols-1 '>
-
+                <Statistics />
 
                 <div className="align-middle inline-block min-w-full shadow overflow-hidden dark:bg-[#343338] shadow-dashboard px-8 pt-3  rounded-lg pb-12">
                     <h1 className='font-bold text-2xl mb-8 mt-2 dark:text-white'>All Employees </h1>
-
+                    <div className='flex'>
+                        {
+                            UserList?.length <= 0 && (<NoData name="Employee" />)
+                        }
+                    </div>
                     <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
 
                         {
@@ -108,9 +142,9 @@ const Employee = () => {
                                                         <span className='mx-2'>assign task  </span>
                                                     </button>
                                                     <Modal open={ open } onClose={ () => setOpen(false) } className='container mx-auto bg'>
-                                                        <ModalDialog className=' dark:bg-[#343338]'>
-                                                            <h1 className='text-center font-bold text-4xl text-white'>Assign new task</h1>
-                                                            <div className="max-w-md mx-auto">
+                                                        <ModalDialog className='w-[700px]  dark:bg-[#343338]'>
+                                                            <h1 className='text-center font-bold text-4xl dark:text-white'>Assign new task</h1>
+                                                            <div className="w-full mx-auto">
                                                                 <form className="dark:bg-[#343338] shadow-md rounded px-8 pt-6 pb-8 mb-4">
                                                                     <div className="mb-4">
                                                                         <label className="block text-white text-sm font-bold mb-2" htmlFor="Title">
@@ -119,6 +153,9 @@ const Employee = () => {
                                                                         <input className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 text-white" id="Title" type="text" placeholder="Title" name="name" onChange={ (e) => {
                                                                             setName(e.target.value);
                                                                         } } />
+
+                                                                        { errors.name && <p className="text-red-500 text-xs mt-1"> { errors.name }</p> }
+
                                                                     </div>
                                                                     <div className="mb-4">
                                                                         <label className="block text-white text-sm font-bold mb-2" htmlFor="Description">
@@ -127,22 +164,29 @@ const Employee = () => {
                                                                         <input className="shadow appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline bg-gray-700 text-white" id="Description" type="text" placeholder="Description" name="Description" onChange={ (e) => {
                                                                             setDescription(e.target.value);
                                                                         } } />
+                                                                        { errors.Description && <p className="text-red-500 text-xs mt-1"> { errors.Description }</p> }
                                                                     </div>
                                                                     <div className="mb-4">
                                                                         <label className="block text-white text-sm font-bold mb-2" htmlFor="stock">
                                                                             Date Start
                                                                         </label>
-                                                                        <input className="shadow appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline bg-gray-700 text-white" id="stock" type="date" name="DateStart" placeholder="date start" onChange={ (e) => {
-                                                                            setDateStart(e.target.value);
-                                                                        } } />
+                                                                        <input className="shadow appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline bg-gray-700 text-white" id="stock"
+                                                                            min={ minDate }
+                                                                            type="datetime-local" name="DateStart" placeholder="date start" onChange={ (e) => {
+                                                                                setDateStart(e.target.value);
+                                                                            } } />
+                                                                        { errors.DateStart && <p className="text-red-500 text-xs mt-1"> { errors.DateStart }</p> }
                                                                     </div>
                                                                     <div className="mb-4">
                                                                         <label className="block text-white text-sm font-bold mb-2" htmlFor="stock">
                                                                             Date End
                                                                         </label>
-                                                                        <input className="shadow appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline bg-gray-700 text-white" id="stock" type="date" name="DateEnd" placeholder="date end" onChange={ (e) => {
-                                                                            setDateEnd(e.target.value);
-                                                                        } } />
+                                                                        <input className="shadow appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline bg-gray-700 text-white" id="stock"
+                                                                            min={ minDate } type="datetime-local" name="DateEnd" placeholder="date end" onChange={ (e) => {
+                                                                                setDateEnd(e.target.value);
+                                                                            } } />
+
+                                                                        { errors.DateEnd && <p className="text-red-500 text-xs mt-1"> { errors.DateEnd }</p> }
                                                                     </div>
                                                                     {
                                                                         role !== 'Magazinier' &&
@@ -155,18 +199,13 @@ const Employee = () => {
                                                                                 setTypeTask(e.target.value);
                                                                             } } >
                                                                                 <option value="" disabled>Select Type</option>
-
-
                                                                                 <option value="Traitement">Traitement</option>
                                                                                 <option value="Surviance">Surviance</option>
                                                                                 <option value="Irrigation">Irrigation</option>
                                                                                 <option value="Fertigation">Fertigation</option>
-
-
-
-
                                                                             </select>
 
+                                                                            { errors.TypeTask && <p className="text-red-500 text-xs mt-1"> { errors.role }</p> }
                                                                         </div>
 
                                                                     }

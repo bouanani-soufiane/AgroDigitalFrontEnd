@@ -79,10 +79,11 @@ const UserSlice = createSlice({
                 state.isLoading = false,
                     state.user = null;
                 if (action.error.message == 'Request failed with status code 401') {
-                    state.error = 'Access Denied! Invalid Credentials';
+                    state.error = 'Invalid Credentials !';
                 } else {
                     state.error = action.error.message;
                 }
+                console.log(action.error.message);
             })
             .addCase(RegisterUser.fulfilled, (state, action) => {
                 if (action.payload.status === 400) {
@@ -101,7 +102,7 @@ const UserSlice = createSlice({
                 state.isLoading = true;
             })
             .addCase(RegisterUser.rejected, (state, action) => {
-                // console.log(action.error.message);
+                console.log('error',action);
                 state.isLoading = false;
                 state.error = action.error.message;
             })

@@ -25,16 +25,17 @@ export const fetchProgram = createAsyncThunk(
 export const addProgram = createAsyncThunk(
   "program/addProgram",
   async (data) => {
+    console.log(data);
     try {
       const response = await axios.post("http://localhost/api/v1/programs/", {
         cultur_name: data.cultur_name,
         program_name: data.program_name,
         stage_name: data.stage_name,
+        stage_duration: data.stage_duration,
         attribute_name: data.attribute_name,
         attribute_value: data.attribute_value,
       });
 
-      // console.log("Response from server:", response.data);
 
       return response.data.data;
     } catch (error) {

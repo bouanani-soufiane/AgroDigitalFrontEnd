@@ -51,15 +51,10 @@ export const Navbar = ({ activeMenu, setActiveMenu }) => {
         />
         <h2 className="font-bold text-lg ">Dashboard</h2>
       </div>
-      {/* */ }
+
       <div className="col-span-2">
-        <input
-          type="text"
-          placeholder="Search"
-          className="bg-[#F6F6FA] dark:bg-[#303235] p-2.5 w-full md:w-5/6 rounded-lg"
-        />
       </div>
-      {/* */ }
+
       <div className=" md:col-span-1 col-span-4 md:mt-0 mt-5 gap-3 flex justify-center md:justify-end dark:text-gray-300 items-center text-xl">
         { theme === "dark" ? (
           <GoSun
@@ -83,7 +78,7 @@ export const Navbar = ({ activeMenu, setActiveMenu }) => {
               className="my-auto cursor-pointer"
             /> </p>
 
-          { isOpen && (
+          { userConnected.role != 'Gerant' && isOpen  && (
             <div className=" bg-[#333] flex flex-col absolute top-28 md:top-16 w-40 p-3 text-sm rounded-md">
               <Link
                 to="profile"

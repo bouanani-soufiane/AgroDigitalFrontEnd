@@ -6,6 +6,7 @@ import ProgramSlice from '../feature/ProgramSlice';
 import TaskSlice from '../feature/TaskSlice';
 import ReportSlice from '../feature/ReportSlice';
 import ProductSlice from "../feature/ProductSlice";
+import StatisicSlice from "../feature/statistics";
 
 const store = configureStore({
     reducer: {
@@ -14,7 +15,8 @@ const store = configureStore({
         Program: ProgramSlice,
         Task: TaskSlice,
         Report: ReportSlice,
-        Product : ProductSlice
+        Product: ProductSlice,
+        Statisics: StatisicSlice
     }
 });
 
