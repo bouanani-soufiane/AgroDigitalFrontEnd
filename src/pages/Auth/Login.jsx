@@ -75,13 +75,7 @@ const Login = () => {
                                 required
                             />
                         </div>
-                        <div className="flex justify-between w-full py-4">
-                            <div className="mr-24">
-                                <input type="checkbox" name="ch" id="ch" className="mr-2" />
-                                <span className="text-md">Remember for 30 days</span>
-                            </div>
-                            <span className="font-bold text-md">Forgot password</span>
-                        </div>
+                 
                         <button
                             className="w-full bg-green-900 text-white p-2 rounded-lg mb-6 hover:bg-green-800 hover:text-white hover:border hover:border-gray-300"
                         >
@@ -102,9 +96,8 @@ const Login = () => {
                         <div
                             className="absolute hidden bottom-10 right-6 p-6 bg-white bg-opacity-30 backdrop-blur-sm rounded drop-shadow-lg md:block"
                         >
-                            <span className="text-white text-xl"
-                            >We've been uesing Untitle to kick"<br />start every new project
-                                and can't <br />imagine working without it."
+                            <span className="text-white text-lg -4"
+                            >Optimize Your Farm and Empower <br /> Your Team with the Ultimate <br /> Management Solution!"
                             </span>
                         </div>
                     </div>

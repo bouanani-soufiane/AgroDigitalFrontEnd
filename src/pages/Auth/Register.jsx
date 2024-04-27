@@ -8,6 +8,11 @@ import { RegisterUser } from '../../store/UserSlice';
 
 const Register = () => {
 
+
+    
+
+
+
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -157,9 +162,8 @@ const Register = () => {
                         <div
                             className="absolute hidden bottom-10 right-6 p-6 bg-white bg-opacity-30 backdrop-blur-sm rounded drop-shadow-lg md:block"
                         >
-                            <span className="text-white text-xl"
-                            >We've been uesing Untitle to kick"<br />start every new project
-                                and can't <br />imagine working without it."
+                            <span className="text-white text-lg -4"
+                            >Optimize Your Farm and Empower <br /> Your Team with the Ultimate <br /> Management Solution!"
                             </span>
                         </div>
                     </div>
