@@ -41,7 +41,12 @@ export const removeProduct = createAsyncThunk(
   async (data) => {
     const response = await axios.delete(
       `http://localhost/api/v1/products/${data}`
-    );
+      , {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token.access_token}`,
+        }
+      });
     return response.data.data;
   }
 );

@@ -1,4 +1,4 @@
-import { React, useState } from 'react'
+import { React, useEffect, useState } from 'react'
 import HomeNav from '../../components/HomeNav'
 import Footer from '../../components/Footer'
 import { Link, useNavigate } from "react-router-dom";
@@ -34,6 +34,20 @@ const Login = () => {
                 }
             })
     }
+
+
+    const userConnected = JSON.parse(localStorage.getItem('user'));
+
+
+    useEffect(() => {
+        if (userConnected) {
+            navigate('/');
+        }
+    }, []);
+
+
+
+
     return (
         <div>
             <HomeNav />
@@ -43,14 +57,14 @@ const Login = () => {
                     className=" flex flex-col m-6 space-y-8 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0"
                 >
                     <form className="flex flex-col justify-center p-8 md:p-14"
-                        onSubmit={handleLogin}
+                        onSubmit={ handleLogin }
                     >
                         <span className="mb-3 text-4xl font-bold">Welcome back</span>
                         <span className="font-light text-gray-400 mb-8">
                             Welcom back! Please enter your details
                         </span>
-                        {error &&
-                            <div class="hover:red-yellow-500 w-full mb-2 select-none rounded-l-lg border-l-4 border-red-400 bg-red-100 p-4 font-medium">{error }</div>
+                        { error &&
+                            <div class="hover:red-yellow-500 w-full mb-2 select-none rounded-l-lg border-l-4 border-red-400 bg-red-100 p-4 font-medium">{ error }</div>
                         }
                         <div className="py-4">
                             <span className="mb-2 text-md">Email</span>
@@ -58,8 +72,8 @@ const Login = () => {
                                 type="email"
                                 className="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500"
                                 name="email"
-                                value={email}
-                                onChange={handleEmailInput}
+                                value={ email }
+                                onChange={ handleEmailInput }
                                 autoComplete="off"
                                 required
                             />
@@ -69,17 +83,17 @@ const Login = () => {
                             <input
                                 type="password"
                                 name="password"
-                                value={password}
+                                value={ password }
                                 className="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500"
-                                onChange={handlePwdInput}
+                                onChange={ handlePwdInput }
                                 required
                             />
                         </div>
-                 
+
                         <button
                             className="w-full bg-green-900 text-white p-2 rounded-lg mb-6 hover:bg-green-800 hover:text-white hover:border hover:border-gray-300"
                         >
-                            {loading ? 'Loading... ' : ' Sign in'}
+                            { loading ? 'Loading... ' : ' Sign in' }
                         </button>
 
                         <div className="flex justify-center text-center text-gray-400">

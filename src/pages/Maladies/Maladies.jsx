@@ -151,7 +151,6 @@ const Maladie = () => {
                                 </div>
                             ) }
 
-                            { !loading && error ? <p> { error } </p> : null }
                             {
                                 DiseaseList.map((item, index) => (
                                     <tr key={ item.id }>

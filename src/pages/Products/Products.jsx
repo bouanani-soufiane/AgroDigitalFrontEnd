@@ -46,7 +46,8 @@ const Product = () => {
         formData.append("image", image);
 
         dispatch(addProduct({ formData: formData }))
-            .then(toast.success('product added'));
+            .then(toast.success('product added'))
+            .catch();
         setOpen(false);
 
     }
@@ -209,7 +210,7 @@ const Product = () => {
                                                 <div class="">
                                                     <div class="flex items-center">
                                                         <div class="w-48 flex items-center justify-center">
-                                                            <img src={ product.image.path } alt="image" />
+                                                            { product.image && <img src={ product.image.path } alt="image" /> }
                                                         </div>
 
                                                     </div>

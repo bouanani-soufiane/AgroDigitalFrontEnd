@@ -10,6 +10,9 @@ const ReportState = {
   response: "",
 };
 
+const token = JSON.parse(localStorage.getItem('user'));
+
+
 export const fetchReport = createAsyncThunk(
   "Report/fetchReport",
   async () => {
@@ -30,7 +33,9 @@ export const addReport = createAsyncThunk(
         ,
         {
           headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token.access_token}`,
+
           }
         }
 

@@ -21,6 +21,7 @@ export const fetchProgram = createAsyncThunk(
     }
   }
 );
+const token = JSON.parse(localStorage.getItem('user'));
 
 export const addProgram = createAsyncThunk(
   "program/addProgram",
@@ -34,6 +35,11 @@ export const addProgram = createAsyncThunk(
         stage_duration: data.stage_duration,
         attribute_name: data.attribute_name,
         attribute_value: data.attribute_value,
+      }, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token.access_token}`,
+        }
       });
 
 
@@ -51,7 +57,7 @@ export const finishProgram = createAsyncThunk(
   async (data) => {
     try {
       const response = await axios.post("http://localhost/api/v1/finishprogram", {
-        programData : data
+        programData: data
       });
 
       // console.log("finish prog response:", response.data);

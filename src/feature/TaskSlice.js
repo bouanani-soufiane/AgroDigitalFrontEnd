@@ -32,7 +32,12 @@ export const employeeTask = createAsyncThunk(
 export const fetchTask = createAsyncThunk(
   "Task/fetchTask",
   async () => {
-    const response = await axios.get("http://localhost/api/v1/tasks");
+    const response = await axios.get("http://localhost/api/v1/tasks", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token.access_token}`,
+      }
+    });
     return response.data.data;
   }
 );
@@ -51,7 +56,6 @@ export const addTask = createAsyncThunk(
         TypeTask: data.TypeTask,
         employee_id: data.employee_id,
       });
-
 
       return response.data.data;
     } catch (error) {
@@ -74,8 +78,12 @@ export const UpdateTask = createAsyncThunk(
         Status: data.Status,
         TypeTask: data.TypeTask,
         employee_id: data.employee_id,
+      }, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token.access_token}`,
+        }
       });
-
 
       return response.data.data;
     } catch (error) {
@@ -116,7 +124,12 @@ export const markAsCancelled = createAsyncThunk(
 export const removeTask = createAsyncThunk(
   "Task/removeTask",
   async (data) => {
-    const response = await axios.delete(`http://localhost/api/v1/tasks/${data}`);
+    const response = await axios.delete(`http://localhost/api/v1/tasks/${data}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token.access_token}`,
+      }
+    });
 
     return response.data;
   }

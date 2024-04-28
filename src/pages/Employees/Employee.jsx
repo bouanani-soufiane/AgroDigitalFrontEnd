@@ -65,7 +65,6 @@ const Employee = () => {
 
         if (!DateEnd || endDate < now) tempErrors.DateEnd = "DateEnd is invalid";
 
-        if (!TypeTask) tempErrors.TypeTask = "TypeTask is required";
 
         setErrors(tempErrors);
         return Object.values(tempErrors).every(x => x === "");
@@ -74,8 +73,6 @@ const Employee = () => {
 
     const handleAddTask = (e) => {
 
-
-        // console.log(name, ' | ', Description, ' | ', DateStart, ' | ', DateEnd, ' | ', Status, ' | ', TypeTask, ' | ', employee_id);
         e.preventDefault();
         if (!validate()) return;
         dispatch(addTask(
@@ -101,8 +98,8 @@ const Employee = () => {
         <div className="">
 
             <ToastContainer />
+            <Statistics />
             <div className='pt-12 grid gap-4 md:gap-8 grid-cols-1 '>
-                <Statistics />
 
                 <div className="align-middle inline-block min-w-full shadow overflow-hidden dark:bg-[#343338] shadow-dashboard px-8 pt-3  rounded-lg pb-12">
                     <h1 className='font-bold text-2xl mb-8 mt-2 dark:text-white'>All Employees </h1>

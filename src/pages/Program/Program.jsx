@@ -147,17 +147,17 @@ const Program = () => {
             <div className='pt-12 grid gap-4 md:gap-8 grid-cols-1'>
                 <div className="lg:w-full  rounded-lg overflow-hidden sm:mr-10  flex items-end justify-start relative">
                     <div className="container  mx-auto">
-                        <div className="sm:flex sm:items-center sm:justify-between">
-                            <div>
-                                <div className="flex items-center gap-x-3">
-                                    <h2 className="text-lg font-medium text-gray-800 dark:text-white">Program</h2>
+                        <div className="sm:flex flex justify-between sm:items-center sm:justify-between">
+                            <div className='flex'>
+                                <div className="flex items-center justify-between gap-x-3">
+                                    <h2 className="text-lg mb-10 font-medium text-gray-800 dark:text-white">Program</h2>
                                 </div>
                             </div>
 
                             <div className="flex items-center mt-4 gap-x-3">
 
                                 <React.Fragment>
-                                    <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-blue-500 rounded-lg shrink-0 sm:w-auto gap-x-2 hover:bg-blue-600 dark:hover:bg-blue-500 dark:bg-blue-900"
+                                    <button className="flex mb-12 items-center justify-center w-100 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-blue-500 rounded-lg shrink-0 sm:w-auto gap-x-2 hover:bg-blue-600 dark:hover:bg-blue-500 dark:bg-blue-900"
                                         variant="outlined"
                                         color="neutral"
                                         startDecorator={ <Add /> }
@@ -302,38 +302,41 @@ const Program = () => {
                                                         </tr>
                                                     </thead>
                                                     <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-[#343338] dark:hover:bg-gray-50">
-                                                        { [...new Set(program.stage.map(stage => {
-                                                            return stage.stage_name;
-                                                        }))].map((stageName, index) => (
+                                                        { [...new Set(program.stage.map(stage => stage.stage_name))].map((stageName, index) => (
                                                             <tr key={ index } className="text-gray-700 dark:bg-gray-700 dark:text-gray-100 bg-green-100 dark:hover:text-gray-200 dark:hover:bg-gray-600">
                                                                 <td className="px-4 py-3">{ stageName }</td>
                                                                 <td className="px-4 py-3">
-                                                                    <input type="number" name="" className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-green-100 dark:bg-gray-700" defaultValue={ 15 }
-                                                                    />
-                                                                </td>
-                                                                { program.stage
-                                                                    .filter(stage => stage.stage_name === stageName)
-                                                                    .map((stage, attrIndex) => {
-                                                                        const programId = ProgramList.findIndex(p => p.id === stage.pivot.program_id);
-                                                                        const stageId = stage.pivot.stage_id;
-                                                                        const attribute = stage.pivot.attribute_name;
-                                                                        // { console.log("hi", stage.pivot.attribute_name)}
-                                                                        { console.log("here", stageId) }
+                                                                    { program.stage.filter(stage => stage.stage_name === stageName).map((stage, attrIndex) => (
+                                                                            <input
+                                                                                type="number"
+                                                                                className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-green-100 dark:bg-gray-700"
+                                                                                Value={ stage.stage_duration }
+                                                                                key={ attrIndex }
+                                                                                disabled
+                                                                            />
 
-                                                                        return (
-                                                                            <td key={ attrIndex } className="px-4 py-3">
-                                                                                <input
-                                                                                    type="number"
-                                                                                    className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-green-100 dark:bg-gray-700"
-                                                                                    defaultValue={ stage.pivot.attribute_value }
-                                                                                    onChange={ (e) => handleChange(programId + 1, stageId, attribute, e.target.value) }
-                                                                                />
-                                                                            </td>
-                                                                        );
-                                                                    }) }
+                                                                    )) }
+                                                                </td>
+                                                                { program.stage.filter(stage => stage.stage_name === stageName).map((stage, attrIndex) => {
+                                                                    const programId = ProgramList.findIndex(p => p.id === stage.pivot.program_id);
+                                                                    const stageId = stage.pivot.stage_id;
+                                                                    const attribute = stage.pivot.attribute_name;
+
+                                                                    return (
+                                                                        <td key={ attrIndex } className="px-4 py-3">
+                                                                            <input
+                                                                                type="number"
+                                                                                className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-green-100 dark:bg-gray-700"
+                                                                                defaultValue={ stage.pivot.attribute_value }
+                                                                                onChange={ (e) => handleChange(programId + 1, stageId, attribute, e.target.value) }
+                                                                            />
+                                                                        </td>
+                                                                    );
+                                                                }) }
                                                             </tr>
                                                         )) }
                                                     </tbody>
+
                                                 </table>
                                             </div>
                                         </div>

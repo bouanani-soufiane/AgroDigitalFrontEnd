@@ -18,11 +18,14 @@ export const Statistics = () => {
 
 
   return (
-    <div className="grid gap-4 md:gap-8 grid-cols-1 md:grid-cols-4">
-      <Card title="Total Employees" number={ Stats.Stats.users } color="#83E8E1" />
-      <Card title="Total Diseases" number={ Stats.Stats.diseases } color="#83E8E1" />
-      <Card title="All Traitement" number={ Stats.Stats.Traitement } color="#FFBA79" />
-      <Card title="Pending Tasks" number={ Stats.Stats.PendingTasks } color="#FFB2D3" />
-    </div>
+    <div className=''>
+      <div class="md:mt-[-42px] lg:mt-2 mt-[30px] grid gap-4 md:gap-8 grid-cols-1 md:grid-cols-4">
+        <Card title="Total Employees" number={ Stats.Stats.users } color="#83E8E1" />
+        <Card title="Total Diseases" number={ Stats.Stats.diseases } color="#83E8E1" />
+        <Card title="All Traitement" number={ Stats.Stats.Traitement } color="#FFBA79" />
+        <Card title="Pending Tasks" number={ Stats.Stats.PendingTasks } color="#FFB2D3" />
+      </div>
+   </div>
+
   )
 }
