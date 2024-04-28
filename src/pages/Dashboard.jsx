@@ -25,7 +25,7 @@ export const Dashboard = () => {
   let diseaseData = []
   useEffect(() => {
     if (diseaseStats && diseaseStats.data) {
-      console.log(diseaseStats.data); // Log the full data array
+      console.log(diseaseStats.data); 
       const countsByMonth = new Map(diseaseStats.data.map(ele => [ele.month, ele.count]));
       const allMonths = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
 

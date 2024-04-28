@@ -9,7 +9,7 @@ import { RegisterUser } from '../../store/UserSlice';
 const Register = () => {
 
 
-    
+
 
 
 
@@ -133,13 +133,6 @@ const Register = () => {
 
                             />
                             { errors.password && <p className="text-red-500 text-xs mt-1">{ errors.password }</p> }
-                        </div>
-                        <div className="flex justify-between w-full py-4">
-                            <div className="mr-24">
-                                <input type="checkbox" name="ch" id="ch" className="mr-2" />
-                                <span className="text-md">Remember for 30 days</span>
-                            </div>
-                            <span className="font-bold text-md">Forgot password</span>
                         </div>
                         <button
                             className="w-full bg-green-900 text-white p-2 rounded-lg mb-6 hover:bg-green-800 hover:text-white hover:border hover:border-gray-300"

@@ -12,6 +12,7 @@ import Register from "../src/pages/Auth/Register";
 import Report from "../src/pages/Report/Report";
 
 import ProtectedRoute from '../src/utilities/PrivateRoutes';
+import PageNotFound from "../src/pages/PageNotFound/PageNotFound";
 
 const Router = createBrowserRouter([
     {
@@ -21,6 +22,11 @@ const Router = createBrowserRouter([
     {
         path: '/register',
         element: <Register />
+    },
+    {
+        path: '/*',
+        element: <PageNotFound />
+
     },
     {
         element: <App />,
@@ -60,7 +66,9 @@ const Router = createBrowserRouter([
                 path: '/reports',
                 element: <ProtectedRoute component={ Report } roles={ ['Gerant'] } />
 
-            }
+            },
+
+
         ]
     }
 

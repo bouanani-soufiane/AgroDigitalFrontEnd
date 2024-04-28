@@ -78,7 +78,7 @@ export const Navbar = ({ activeMenu, setActiveMenu }) => {
               className="my-auto cursor-pointer"
             /> </p>
 
-          { userConnected.role != 'Gerant' && isOpen  && (
+          { userConnected && userConnected.role != 'Gerant'   && isOpen  && (
             <div className=" bg-[#333] flex flex-col absolute top-28 md:top-16 w-40 p-3 text-sm rounded-md">
               <Link
                 to="profile"
